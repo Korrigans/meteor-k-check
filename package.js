@@ -32,7 +32,8 @@ Package.onTest(function(api) {
   //Console tests convenience
   api.imply([
     'korrigans:k',
-    'stevezhu:lodash@3.10.1'
+    'stevezhu:lodash@3.10.1',
+    'check'
   ]);
 
   api.addFiles('check-tests.js');
