@@ -1,4 +1,6 @@
-let warnedAboutMatchInteger = false;
+let warnedAboutMatchInteger = false,
+    warnedAboutMatchIncompatibilities = false,
+    warnedAboutMatchOneOf = false;
 
 let primitiveMap = new Map();
 primitiveMap.set(Boolean, 'boolean');
@@ -30,6 +32,13 @@ function beautifyPattern(pattern) {
   //Legacy array pattern
   if(_.isArray(pattern)) {
     return `[${beautifyPattern(pattern[0])}]`;
+  }
+  //Legacy Match.OneOf pattern
+  if(_.isArray(pattern.choices)) {
+    return `OneOf[${_.reduce(pattern.choices,
+      (accu, entry) => `${accu}, ${beautifyPattern(entry)}`,
+      ''
+    ).slice(2)}]`;
   }
 
   return 'Unknown pattern';
@@ -122,5 +131,62 @@ K.check = function KCheck(value, pattern) {
     for(let entry of value) {
       KCheck(entry, pattern[0]);
     }
+
+    return;
   }
+
+  //Legacy Match.OneOf pattern
+  if(pattern.choices) {
+    if(!warnedAboutMatchOneOf) {
+      console.warn(
+        'It looks like you are using Match.OneOf.\n' +
+        'K.Check tried to detect it, but might have misunderstood or conflicted.\n' +
+        // TODO: Once it's done, replace with actual API method (Like KP.OneOf or something)
+        'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
+      );
+      warnedAboutMatchOneOf = true;
+    }
+    let choices = pattern.choices,
+        failedAttemps = 0;
+    for(let subPattern of choices) {
+      try {
+        KCheck(value, subPattern);
+      } catch (e) {
+        failedAttemps++;
+      }
+    }
+    //All attemps failed
+    if(failedAttemps === choices.length) {
+      // XXX: This is a terrible error, but we can't really do any better
+      throw new Error(`Failed OneOf validation of ${beautifyValue(value)} with pattern ${beautifyPattern(pattern)}`);
+    }
+    return;
+  }
+
+
+
+  // XXX: Unrecoverable incompatibility with check
+  // If pattern is either:
+  //  - Match.Optional
+  //  - Match.ObjectIncluding
+  //  - Match.ObjectWithValues
+  // There is no way we can differentiate them without including check.
+  // Each uses the constructor pattern with a local variable, assigning
+  // the same "pattern" field, making them indistinguishable.
+  if(pattern.pattern && !warnedAboutMatchIncompatibilities) {
+    if(!warnedAboutMatchIncompatibilities) {
+      //Throw all the time instead?
+      console.error(
+        'K.check is incompatible with Match.Optional, Match.ObjectIncluding, ' +
+        'and Match.ObjectWithValues due to a malfunction of the native check ' +
+        'package. Instead, use korrigans:k-pattern http://github.com/Korrigans/meteor-k-pattern'
+      );
+      warnedAboutMatchIncompatibilities = true;
+    }
+    return;
+  }
+
+
+  //Nothing caught, unknown pattern
+  throw new Error(`Unknown pattern!`);
 };

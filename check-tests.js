@@ -260,7 +260,6 @@ describe('[k-check][Unit] K.check', () => {
         let otherTypes = _.difference(allTypes, testTypes);
         for(let testType of otherTypes) {
           for(let testCase of primitiveMap.get(testType)) {
-            console.log('generating failing test');
             fails(testCase, testPattern,
               `Match.OneOf does not allow ${beautifyValue(testCase)} with ${beautifyPattern(testPattern)}`
             );
