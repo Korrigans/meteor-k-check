@@ -26,6 +26,13 @@ function beautifyPattern(pattern) {
   if(_.isArray(pattern)) {
     return `[${beautifyPattern(pattern[0])}]`;
   }
+  //Legacy Match.OneOf pattern
+  if(_.isArray(pattern.choices)) {
+    return `OneOf[${_.reduce(pattern,
+      (accu, entry) => `${accu}, ${beautifyPattern(entry)}`,
+      ''
+    ).slice(2)}]`;
+  }
 
   return 'Unknown pattern';
 }
@@ -225,6 +232,37 @@ describe('[k-check][Unit] K.check', () => {
           for(let testCase of primitiveMap.get(testType)) {
             fails(testCase, matchInteger,
               `Match.Integer does not allow ${beautifyValue(testCase)} of type ${beautifyPattern(matchInteger)}`
+            );
+          }
+        }
+      });
+    });
+
+    describe('Match.OneOf', () => {
+      let testTypes = [Boolean, Function];
+      let testPattern = Match.OneOf(...testTypes);
+
+      describe('matches', () => {
+        for(let testType of testTypes) {
+          for(let testCase of primitiveMap.get(testType)) {
+            matches(testCase, testPattern,
+              `Match.OneOf allows ${beautifyValue(testCase)} with ${beautifyPattern(testPattern)}`
+            );
+          }
+        }
+      });
+
+      describe('fails', () => {
+        let allTypes = [];
+        for(let type of primitiveMap.keys()) {
+          allTypes.push(type);
+        }
+        let otherTypes = _.difference(allTypes, testTypes);
+        for(let testType of otherTypes) {
+          for(let testCase of primitiveMap.get(testType)) {
+            console.log('generating failing test');
+            fails(testCase, testPattern,
+              `Match.OneOf does not allow ${beautifyValue(testCase)} with ${beautifyPattern(testPattern)}`
             );
           }
         }
