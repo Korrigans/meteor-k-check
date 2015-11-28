@@ -1,4 +1,10 @@
 describe('[k-check][Unit] K.check', () => {
+  it('should be defined', () => {
+    let expected = 'function',
+        actual = typeof K.check;
+    expect(actual).toEqual(expected);
+  });
+
   let matches = (value, pattern, message) => {
     it(message, (done) => {
       let error = null;
@@ -36,54 +42,49 @@ describe('[k-check][Unit] K.check', () => {
     });
   };
 
-  it('should be defined', () => {
-    let expected = 'function',
-        actual = typeof K.check;
-    expect(actual).toEqual(expected);
-  });
+  let primitiveMap = new Map();
+  primitiveMap.set(Boolean, [
+    true,
+    false
+  ]);
+  primitiveMap.set(Number, [
+    0,
+    Infinity,
+    Math.PI,
+    0.1 + 0.2,
+    -2.5 * Math.PI,
+    -42,
+    5e42,
+    0b111000101,
+    0x712E5AF7F8AC90,
+    0725132133 //octal
+  ]);
+  primitiveMap.set(String, [
+    '',
+    'Korrigans invasion in your fridge',
+    `${Math.PI / 42}`
+  ]);
+  primitiveMap.set(Function, [
+    () => {},
+    function(){},
+    Object
+  ]);
+  primitiveMap.set(Object, [
+    {},
+    Object.create({}),
+    new Date()
+  ]);
+  primitiveMap.set(undefined, [
+    undefined
+  ]);
+  primitiveMap.set(null, [
+    null
+  ]);
 
   /**
    * Primitive tests
    */
   describe('Primitive types', () => {
-    let primitiveMap = new Map();
-
-    primitiveMap.set(Boolean, [
-      true,
-      false
-    ]);
-    primitiveMap.set(Number, [
-      0,
-      Infinity,
-      Math.PI,
-      -42,
-      5e42,
-      0b111000101,
-      0x712E5AF7F8AC90,
-      0725132133 //octal
-    ]);
-    primitiveMap.set(String, [
-      '',
-      'Korrigans invasion in your fridge',
-      `${Math.PI / 42}`
-    ]);
-    primitiveMap.set(Function, [
-      () => {},
-      function(){},
-      Object
-    ]);
-    primitiveMap.set(Object, [
-      {},
-      Object.create({}),
-      new Date()
-    ]);
-    primitiveMap.set(undefined, [
-      undefined
-    ]);
-    primitiveMap.set(null, [
-      null
-    ]);
-
     describe('matches', () => {
       for(let type of primitiveMap.keys()) {
         for(let testCase of primitiveMap.get(type)) {
@@ -124,6 +125,57 @@ describe('[k-check][Unit] K.check', () => {
     let matchAny = Match.Any,
         matchInteger = Match.Integer;
 
-    
+    describe('Match.any', () => {
+      describe('matches', () => {
+        //Test if everything passes with Match.Any
+        for(let type of primitiveMap.keys()) {
+          for(let testCase of primitiveMap.get(type)) {
+            matches(testCase, matchAny,
+              `Match.Any allows ${type === String? `"${testCase}"` : testCase} of type ${type && type.name}`
+            );
+          }
+        }
+      });
+    });
+
+    describe('Match.Integer', () => {
+      let
+        testNumbers = primitiveMap.get(Number),
+        // NOTE: While this may seem incorrect with methods like
+        // Number.isInteger, this is done to keep the legacy behaviour of check
+        integers = testNumbers.filter((n) => (n | 0) === n),
+
+        nonIntegers = _.without(testNumbers, ...integers);
+
+      describe('matches', () => {
+        for(let integer of integers) {
+          matches(integer, matchInteger,
+            `Match.Integer allows ${integer}`
+          );
+        }
+      });
+      describe('fails', () => {
+        let otherTypes = [];
+        for(let nonInteger of nonIntegers) {
+          fails(nonInteger, matchInteger,
+            `Match.Integer does not allow ${nonInteger}`
+          );
+        }
+
+        for(let type of primitiveMap.keys()) {
+          if(type !== Number) {
+            otherTypes.push(type);
+          }
+        }
+
+        for(let testType of otherTypes) {
+          for(let testCase of primitiveMap.get(testType)) {
+            fails(testCase, matchInteger,
+              `Match.Integer does not allow ${testType === String? `"${testCase}"` : testCase} of type ${testType && testType.name}`
+            );
+          }
+        }
+      });
+    });
   });
 });

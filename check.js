@@ -1,3 +1,5 @@
+let warnedAboutMatchInteger = false;
+
 K.check = function KCheck(value, pattern) {
   let errorPrefix = '[K.check]',
       primitiveMap = new Map();
@@ -33,6 +35,30 @@ K.check = function KCheck(value, pattern) {
 
     if(typeof value !== primitiveMap.get(pattern)) {
       throw new Error(`${errorPrefix} Expected ${primitiveMap.get(pattern)}, got ${typeof value}.`);
+    }
+  }
+
+  //Special legacy Match patterns
+  let matchAny = ['__any__'],
+      matchInteger = ['__integer__'];
+
+  if(_.isEqual(pattern, matchAny)) return;
+
+  if(_.isEqual(pattern, matchInteger)) {
+    if(console.warn && !warnedAboutMatchInteger) {
+      console.warn(
+        `Match.Integer is deprecated and inaccurate. Prefer using KP.Integer() from korrigans:k-pattern http://github.com/Korrigans/meteor-k-pattern`
+      );
+      warnedAboutMatchInteger = true;
+    }
+    if (typeof value !== "number") {
+      throw new Error(`${errorPrefix} Expected integer number, got ${typeof value}`);
+    }
+    // NOTE: This is how it's done in legacy check package.
+    // We could use more accurate strategies, but that would
+    // break backward compatibility
+    if((value | 0) !== value) {
+      throw new Error(`${errorPrefix} Expected integer, got ${value}`);
     }
   }
 };
