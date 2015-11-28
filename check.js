@@ -1,17 +1,61 @@
 let warnedAboutMatchInteger = false;
 
-K.check = function KCheck(value, pattern) {
-  let errorPrefix = '[K.check]',
-      primitiveMap = new Map();
+let primitiveMap = new Map();
+primitiveMap.set(Boolean, 'boolean');
+primitiveMap.set(Number, 'number');
+primitiveMap.set(String, 'string');
+primitiveMap.set(Function, 'function');
+primitiveMap.set(Object, 'object');
+//These two values are not actually used
+primitiveMap.set(undefined, 'undefined');
+primitiveMap.set(null, 'null');
 
-  primitiveMap.set(Boolean, 'boolean');
-  primitiveMap.set(Number, 'number');
-  primitiveMap.set(String, 'string');
-  primitiveMap.set(Function, 'function');
-  primitiveMap.set(Object, 'object');
-  //These two values are not actually used
-  primitiveMap.set(undefined, 'undefined');
-  primitiveMap.set(null, 'null');
+
+// NOTE: Define beautifyPattern and beautifyValue on K?
+/**
+ * Turn a pattern into an elegant string
+ * @private
+ * @param  {*} pattern Pattern to turn to string
+ * @return {String}         Elegant string
+ */
+function beautifyPattern(pattern) {
+  //Legacy primitive patterns
+  if(primitiveMap.has(pattern)) {
+    return `${primitiveMap.get(pattern)}`;
+  }
+  //Legacy constructor pattern
+  if(_.isFunction(pattern)) {
+    return `function ${pattern.name? pattern.name : '(anonymous)'}`;
+  }
+  //Legacy array pattern
+  if(_.isArray(pattern)) {
+    return `[${beautifyPattern(pattern[0])}]`;
+  }
+
+  return 'Unknown pattern';
+}
+
+/**
+ * Turn a value into an elegant string
+ * @private
+ * @param  {*} value Value to turn into a string
+ * @return {String}       Elegant string
+ */
+function beautifyValue(value) {
+  if(typeof value === 'string') {
+    return `"${value}"`;
+  }
+  if(_.isArray(value)) {
+    return `[${_.reduce(value,
+      (accu, entry) => `${accu}, ${beautifyValue(entry)}`,
+      ''
+    ).slice(2)}]`;
+  }
+  return value;
+}
+
+K.check = function KCheck(value, pattern) {
+  let errorPrefix = '[K.check]';
 
   //PRIMITIVE TESTS
   if(primitiveMap.has(pattern)) {
@@ -34,8 +78,10 @@ K.check = function KCheck(value, pattern) {
     }
 
     if(typeof value !== primitiveMap.get(pattern)) {
-      throw new Error(`${errorPrefix} Expected ${primitiveMap.get(pattern)}, got ${typeof value}.`);
+      throw new Error(`${errorPrefix} Expected ${beautifyPattern(pattern)}, got ${typeof value}.`);
     }
+
+    return;
   }
 
   //Special legacy Match patterns
@@ -58,7 +104,23 @@ K.check = function KCheck(value, pattern) {
     // We could use more accurate strategies, but that would
     // break backward compatibility
     if((value | 0) !== value) {
-      throw new Error(`${errorPrefix} Expected integer, got ${value}`);
+      throw new Error(`${errorPrefix} Expected integer, got ${beautifyValue(value)}`);
+    }
+
+    return;
+  }
+
+  //Legacy array pattern, looking like [pattern]
+  if(_.isArray(pattern)) {
+    if(pattern.length > 1) {
+      throw new Error(`${errorPrefix} Legacy check array patterns allow only one element!`);
+    }
+    if(!_.isArray(value)) {
+      throw new Error(`${errorPrefix} Expected ${beautifyPattern(pattern)}, got ${beautifyValue(value)}`);
+    }
+
+    for(let entry of value) {
+      KCheck(entry, pattern[0]);
     }
   }
 };
