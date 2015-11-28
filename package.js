@@ -23,10 +23,17 @@ Package.onTest(function(api) {
   api.use([
     'ecmascript',
     'sanjo:jasmine@0.20.2',
-    'korrigans:k-check'
+    'korrigans:k-check',
+    'stevezhu:lodash@3.10.1',
+
+    'check' //Compatibility tests
   ]);
 
-  api.imply('korrigans:k');
+  //Console tests convenience
+  api.imply([
+    'korrigans:k',
+    'stevezhu:lodash@3.10.1'
+  ]);
 
   api.addFiles('check-tests.js');
 });
