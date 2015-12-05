@@ -101,12 +101,12 @@ describe('[k-check][Unit] K.check', () => {
     });
   };
 
-  let primitiveMap = new Map();
-  primitiveMap.set(Boolean, [
+  let primitiveValues = new Map();
+  primitiveValues.set(Boolean, [
     true,
     false
   ]);
-  primitiveMap.set(Number, [
+  primitiveValues.set(Number, [
     0,
     Infinity,
     Math.PI,
@@ -118,25 +118,25 @@ describe('[k-check][Unit] K.check', () => {
     0x712E5AF7F8AC90,
     0725132133 //octal
   ]);
-  primitiveMap.set(String, [
+  primitiveValues.set(String, [
     '',
     'Korrigans invasion in your fridge',
     `${Math.PI / 42}`
   ]);
-  primitiveMap.set(Function, [
+  primitiveValues.set(Function, [
     () => {},
     function(){},
     Object
   ]);
-  primitiveMap.set(Object, [
+  primitiveValues.set(Object, [
     {},
     Object.create({}),
     new Date()
   ]);
-  primitiveMap.set(undefined, [
+  primitiveValues.set(undefined, [
     undefined
   ]);
-  primitiveMap.set(null, [
+  primitiveValues.set(null, [
     null
   ]);
 
@@ -145,8 +145,8 @@ describe('[k-check][Unit] K.check', () => {
    */
   describe('Primitive types', () => {
     describe('matches', () => {
-      for(let type of primitiveMap.keys()) {
-        for(let testCase of primitiveMap.get(type)) {
+      for(let type of primitiveValues.keys()) {
+        for(let testCase of primitiveValues.get(type)) {
           matches(testCase, type,
             `${beautifyValue(testCase)} is ${beautifyPattern(type)}`
           );
@@ -154,12 +154,12 @@ describe('[k-check][Unit] K.check', () => {
       }
     });
     describe('fails', () => {
-      for(let type of primitiveMap.keys()) {
+      for(let type of primitiveValues.keys()) {
         let allTypes = [];
         // XXX: Manually populate all types, Babel does not seem to like:
-        //     allTypes = [...primitiveMap.keys()]
+        //     allTypes = [...primitiveValues.keys()]
         // (Returns a MapIterator instead of an array)
-        for(let primitiveType of primitiveMap.keys()) {
+        for(let primitiveType of primitiveValues.keys()) {
           allTypes.push(primitiveType);
         }
 
@@ -168,7 +168,7 @@ describe('[k-check][Unit] K.check', () => {
           type
         );
 
-        for(let testCase of primitiveMap.get(type)) {
+        for(let testCase of primitiveValues.get(type)) {
           for(let testType of otherTypes) {
             //Fuzzy test each value against all other existing types
             fails(testCase, testType,
@@ -187,8 +187,8 @@ describe('[k-check][Unit] K.check', () => {
     describe('Match.any', () => {
       describe('matches', () => {
         //Test if everything passes with Match.Any
-        for(let type of primitiveMap.keys()) {
-          for(let testCase of primitiveMap.get(type)) {
+        for(let type of primitiveValues.keys()) {
+          for(let testCase of primitiveValues.get(type)) {
             matches(testCase, matchAny,
               `Match.Any allows ${beautifyValue(testCase)} of type ${beautifyPattern(matchAny)}`
             );
@@ -199,7 +199,7 @@ describe('[k-check][Unit] K.check', () => {
 
     describe('Match.Integer', () => {
       let
-        testNumbers = primitiveMap.get(Number),
+        testNumbers = primitiveValues.get(Number),
         // NOTE: While this may seem incorrect with methods like
         // Number.isInteger, this is done to keep the legacy behaviour of check
         integers = testNumbers.filter((n) => (n | 0) === n),
@@ -222,14 +222,14 @@ describe('[k-check][Unit] K.check', () => {
         }
 
         otherTypes = [];
-        for(let type of primitiveMap.keys()) {
+        for(let type of primitiveValues.keys()) {
           if(type !== Number) {
             otherTypes.push(type);
           }
         }
 
         for(let testType of otherTypes) {
-          for(let testCase of primitiveMap.get(testType)) {
+          for(let testCase of primitiveValues.get(testType)) {
             fails(testCase, matchInteger,
               `Match.Integer does not allow ${beautifyValue(testCase)} of type ${beautifyPattern(matchInteger)}`
             );
@@ -244,7 +244,7 @@ describe('[k-check][Unit] K.check', () => {
 
       describe('matches', () => {
         for(let testType of testTypes) {
-          for(let testCase of primitiveMap.get(testType)) {
+          for(let testCase of primitiveValues.get(testType)) {
             matches(testCase, testPattern,
               `Match.OneOf allows ${beautifyValue(testCase)} with ${beautifyPattern(testPattern)}`
             );
@@ -254,12 +254,12 @@ describe('[k-check][Unit] K.check', () => {
 
       describe('fails', () => {
         let allTypes = [];
-        for(let type of primitiveMap.keys()) {
+        for(let type of primitiveValues.keys()) {
           allTypes.push(type);
         }
         let otherTypes = _.difference(allTypes, testTypes);
         for(let testType of otherTypes) {
-          for(let testCase of primitiveMap.get(testType)) {
+          for(let testCase of primitiveValues.get(testType)) {
             fails(testCase, testPattern,
               `Match.OneOf does not allow ${beautifyValue(testCase)} with ${beautifyPattern(testPattern)}`
             );
@@ -271,8 +271,8 @@ describe('[k-check][Unit] K.check', () => {
 
   describe('Legacy array patterns', () => {
     describe('matches', () => {
-      for(let type of primitiveMap.keys()) {
-        let testCase = primitiveMap.get(type);
+      for(let type of primitiveValues.keys()) {
+        let testCase = primitiveValues.get(type);
         matches(testCase, [type],
           `${beautifyValue(testCase)} is ${beautifyPattern([type])}`
         );
@@ -282,19 +282,19 @@ describe('[k-check][Unit] K.check', () => {
     describe('fails', () => {
       let allTypes = [];
       // XXX: Manually populate all types, Babel does not seem to like:
-      //     allTypes = [...primitiveMap.keys()]
+      //     allTypes = [...primitiveValues.keys()]
       // (Returns a MapIterator instead of an array)
-      for(let primitiveType of primitiveMap.keys()) {
+      for(let primitiveType of primitiveValues.keys()) {
         allTypes.push(primitiveType);
       }
 
-      for(let type of primitiveMap.keys()) {
+      for(let type of primitiveValues.keys()) {
         let otherTypes = _.without(
           allTypes,
           type
         );
         for(let otherType of otherTypes) {
-          let testCase = primitiveMap.get(otherType);
+          let testCase = primitiveValues.get(otherType);
           let testType = [type];
           fails(testCase, testType,
             `${beautifyValue(testCase)} is not ${beautifyPattern(testType)}`
@@ -303,4 +303,6 @@ describe('[k-check][Unit] K.check', () => {
       }
     });
   });
+
+
 });
