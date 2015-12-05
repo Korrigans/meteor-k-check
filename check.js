@@ -173,7 +173,7 @@ K.check = function KCheck(value, pattern) {
   // There is no way we can differentiate them without including check.
   // Each uses the constructor pattern with a local variable, assigning
   // the same "pattern" field, making them indistinguishable.
-  if(pattern.pattern && !warnedAboutMatchIncompatibilities) {
+  if(pattern.pattern) {
     if(!warnedAboutMatchIncompatibilities) {
       //Throw all the time instead?
       console.error(
