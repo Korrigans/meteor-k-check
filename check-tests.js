@@ -158,6 +158,18 @@ describe('[k-check][Unit] K.check', () => {
           );
         }
       }
+      let primitivesTests = _.flatten([
+        primitiveValues.get(Boolean),
+        primitiveValues.get(Number),
+        primitiveValues.get(String)
+      ]);
+      for(let testCase of primitivesTests) {
+        let beautifiedCase = beautifyValue(testCase);
+        matches(testCase, testCase,
+          `${beautifiedCase} is ${beautifiedCase}`
+        );
+      }
+
       //Test manually that NaN is a Number. Legacy behaviour. wtf.
       matches(NaN, Number, 'NaN is a number (..?)');
     });
@@ -183,6 +195,19 @@ describe('[k-check][Unit] K.check', () => {
               `${beautifyValue(testCase)} is not ${beautifyPattern(testType)}`
             );
           }
+        }
+      }
+      let primitivesTests = _.flatten([
+        primitiveValues.get(Boolean),
+        primitiveValues.get(Number),
+        primitiveValues.get(String)
+      ]);
+      for(let testCase of primitivesTests) {
+        const testPatterns = _.without(primitivesTests, testCase);
+        for(let testPattern of testPatterns) {
+          fails(testCase, testPattern,
+            `${beautifyValue(testCase)} is not ${beautifyValue(testPattern)}`
+          );
         }
       }
     });

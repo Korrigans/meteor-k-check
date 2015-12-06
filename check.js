@@ -135,6 +135,11 @@ K.check = function KCheck(value, pattern) {
     return;
   }
 
+  if(_.isObject(pattern)) {
+    checkLegacyObject(value, pattern);
+    return;
+  }
+
   // NOTE: Unrecoverable incompatibility with check
   // If pattern is either:
   //  - Match.Optional
@@ -147,18 +152,26 @@ K.check = function KCheck(value, pattern) {
     if(!warnedAboutMatchIncompatibilities) {
       //Throw all the time instead?
       console.error(
-        'K.check is incompatible with Match.Optional, Match.ObjectIncluding, ' +
-        'and Match.ObjectWithValues due to a malfunction of the native check ' +
-        'package. Instead, use korrigans:k-pattern http://github.com/Korrigans/meteor-k-pattern'
+        'K.check is incompatible with Match.Optional, Match.ObjectIncluding, '
+        + 'and Match.ObjectWithValues due to a malfunction of the native check '
+        + 'package. Instead, use korrigans:k-pattern '
+        + 'http://github.com/Korrigans/meteor-k-pattern'
       );
       warnedAboutMatchIncompatibilities = true;
     }
     return;
   }
 
+  //Some legacy primitive values tests
+  if (_.includes(['string', 'number', 'boolean'], typeof pattern)) {
+    if (value !== pattern) {
+      throw buildCheckError(value, pattern);
+    }
+    return;
+  }
+
   //Nothing caught, unknown pattern
-  //Primitive value?
-  throw new Error(`Unknown pattern ${beautifyPattern(pattern)}`);
+  throw new Error(`${errorPrefix} Unknown pattern ${beautifyPattern(pattern)}`);
 };
 
 /**
@@ -258,4 +271,8 @@ function checkLegacyMatchOneOf(value, pattern) {
   if(failedAttemps === choices.length) {
     throw buildCheckError(value, pattern);
   }
+}
+
+function checkLegacyObject(value, pattern) {
+
 }
