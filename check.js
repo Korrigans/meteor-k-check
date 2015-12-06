@@ -41,7 +41,7 @@ function beautifyPattern(pattern) {
     ).slice(2)}]`;
   }
 
-  return 'Unknown pattern';
+  return pattern;
 }
 
 /**
@@ -65,6 +65,19 @@ function beautifyValue(value) {
 
 K.check = function KCheck(value, pattern) {
   let errorPrefix = '[K.check]';
+
+  if(_.isObject(pattern) && pattern[K.check.custom]) {
+    const testFunc = pattern[K.check.custom];
+
+    if(!_.isFunction(testFunc)) {
+      throw new Error(
+        `${errorPrefix} Expected custom function to be a function, got ${typeof testFunc}`
+      );
+    }
+
+    testFunc(value);
+    return;
+  }
 
   //PRIMITIVE TESTS
   if(primitiveMap.has(pattern)) {
@@ -188,5 +201,6 @@ K.check = function KCheck(value, pattern) {
 
 
   //Nothing caught, unknown pattern
-  throw new Error(`Unknown pattern!`);
+  //Primitive value?
+  throw new Error(`Unknown pattern ${beautifyPattern(pattern)}`);
 };

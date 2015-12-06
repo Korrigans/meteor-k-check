@@ -16,7 +16,10 @@ Package.onUse(function(api) {
 
   api.imply('korrigans:k');
 
-  api.addFiles('check.js');
+  api.addFiles([
+    'check.js',
+    'check-symbol.js'
+  ]);
 });
 
 Package.onTest(function(api) {
