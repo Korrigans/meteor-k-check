@@ -34,16 +34,26 @@ function beautifyPattern(pattern) {
   }
   //Legacy array pattern
   if(_.isArray(pattern)) {
-    return `Array[${beautifyPattern(pattern[0])}]`;
+    return `[${beautifyPattern(pattern[0])}]`;
   }
   //Legacy Match.OneOf pattern
   if(_.isArray(pattern.choices)) {
-    return `Match.OneOf[${
+    return `Match.OneOf(${
       _.reduce(pattern.choices,
         (accu, entry) => `${accu}, ${beautifyPattern(entry)}`,
         ''
-      ).slice(2) //Remove leading ', '
-    }]`;
+      //Remove leading ', '
+      ).slice(2)
+    })`;
+  }
+  if(_.isObject(pattern)) {
+    return `{ ${
+      _.reduce(_.keys(pattern),
+        (accu, key) => `${accu}, ${key}: ${beautifyPattern(pattern[key])}`,
+        ''
+      //Remove leading ', '
+    ).slice(2)
+    } }`;
   }
 
   return pattern;
@@ -67,6 +77,15 @@ function beautifyValue(value) {
   }
   if(_.isFunction(value)) {
     return value.name? `function ${value.name}` : 'anonymous function';
+  }
+  if(_.isObject(value)) {
+    return `{ ${
+      _.reduce(_.keys(value),
+        (accu, key) => `${accu}, ${key} : ${beautifyValue(value[key])}`,
+        ''
+      //Remove leading ', '
+      ).slice(2)
+    } }`;
   }
 
   return _(value).toString();
@@ -243,6 +262,12 @@ function checkLegacyArray(value, pattern) {
   }
 }
 
+/**
+ * Check a value against legacy Match.OneOf pattern
+ * @param  {*} value   Value to check
+ * @param  {{ choices : Array }} pattern Pattern to check value against
+ * @throws {Error}  Value was not conform to pattern
+ */
 function checkLegacyMatchOneOf(value, pattern) {
   if(!warnedAboutMatchOneOf) {
     console.warn(
@@ -273,6 +298,34 @@ function checkLegacyMatchOneOf(value, pattern) {
   }
 }
 
+/**
+ * Check a value against legacy plain object pattern
+ * @param  {*}      value   Value to check
+ * @param  {Object} pattern Object to check value against
+ * @throws {Error}  Value was not conform to pattern
+ */
 function checkLegacyObject(value, pattern) {
+  if(!_.isObject(value)) {
+    throw buildCheckError(value, pattern);
+  }
 
+  const
+    patternKeys = _.keys(pattern),
+    valueKeys = _.keys(value),
+    excessKeys = _.difference(valueKeys, patternKeys),
+    missingKeys = _.difference(patternKeys, valueKeys);
+
+  if(excessKeys.length > 0 || missingKeys.length > 0) {
+    let error = buildCheckError(value, pattern);
+
+    error.message += ` (${excessKeys.length > 0 ? `excess: ${excessKeys.join(', ')}` : ''}`
+    + `${(excessKeys.length > 0 && missingKeys.length > 0) ? '; ' : ''}`
+    + `${missingKeys.length > 0 ? `missing: ${missingKeys.join(', ')}` : ''})`;
+
+    throw error;
+  }
+
+  for(let key in value) {
+    K.check(value[key], pattern[key]);
+  }
 }
