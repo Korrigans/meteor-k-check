@@ -13,29 +13,31 @@ beautifiedPrimitives.set(null, 'null');
  * @param  {*} pattern Pattern to turn to string
  * @return {String}         Elegant string
  */
-function beautifyPattern(pattern) {
-  //Legacy primitive patterns
-  if(beautifiedPrimitives.has(pattern)) {
-    return `${beautifiedPrimitives.get(pattern)}`;
-  }
-  //Legacy constructor pattern
-  if(_.isFunction(pattern)) {
-    return `function ${pattern.name? pattern.name : '(anonymous)'}`;
-  }
-  //Legacy array pattern
-  if(_.isArray(pattern)) {
-    return `[${beautifyPattern(pattern[0])}]`;
-  }
-  //Legacy Match.OneOf pattern
-  if(_.isArray(pattern.choices)) {
-    return `OneOf[${_.reduce(pattern,
-      (accu, entry) => `${accu}, ${beautifyPattern(entry)}`,
-      ''
-    ).slice(2)}]`;
-  }
+ function beautifyPattern(pattern) {
+   //Legacy primitive patterns
+   if(beautifiedPrimitives.has(pattern)) {
+     return `${beautifiedPrimitives.get(pattern)}`;
+   }
+   //Legacy constructor pattern
+   if(_.isFunction(pattern)) {
+     return pattern.name? `function ${pattern.name}` : 'anonymous function';
+   }
+   //Legacy array pattern
+   if(_.isArray(pattern)) {
+     return `Array[${beautifyPattern(pattern[0])}]`;
+   }
+   //Legacy Match.OneOf pattern
+   if(_.isArray(pattern.choices)) {
+     return `Match.OneOf[${
+       _.reduce(pattern.choices,
+         (accu, entry) => `${accu}, ${beautifyPattern(entry)}`,
+         ''
+       ).slice(2) //Remove leading ', '
+     }]`;
+   }
 
-  return 'Unknown pattern';
-}
+   return pattern;
+ }
 
 /**
  * Turn a value into an elegant string
@@ -43,18 +45,22 @@ function beautifyPattern(pattern) {
  * @param  {*} value Value to turn into a string
  * @return {String}       Elegant string
  */
-function beautifyValue(value) {
-  if(typeof value === 'string') {
-    return `"${value}"`;
-  }
-  if(_.isArray(value)) {
-    return `[${_.reduce(value,
-      (accu, entry) => `${accu}, ${beautifyValue(entry)}`,
-      ''
-    ).slice(2)}]`;
-  }
-  return value;
-}
+ function beautifyValue(value) {
+   if(typeof value === 'string') {
+     return `"${value}"`;
+   }
+   if(_.isArray(value)) {
+     return `[${_.reduce(value,
+       (accu, entry) => `${accu}, ${beautifyValue(entry)}`,
+       ''
+     ).slice(2)}]`;
+   }
+   if(_.isFunction(value)) {
+     return value.name? `function ${value.name}` : 'anonymous function';
+   }
+
+   return _(value).toString();
+ }
 
 describe('[k-check][Unit] K.check', () => {
   it('should be defined', () => {
@@ -152,6 +158,8 @@ describe('[k-check][Unit] K.check', () => {
           );
         }
       }
+      //Test manually that NaN is a Number. Legacy behaviour. wtf.
+      matches(NaN, Number, 'NaN is a number (..?)');
     });
     describe('fails', () => {
       for(let type of primitiveValues.keys()) {
