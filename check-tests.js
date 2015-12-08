@@ -331,7 +331,7 @@ describe('[k-check][Unit] K.check', () => {
             () => K.check(testValue, testPattern)
           ).toThrowError(Error, testErrorMessage);
         });
-        it('should error if custom function returned falsey value', () => {
+        describe('errors if custom function returned falsey value', () => {
           const
             falseyValues = [
               '',

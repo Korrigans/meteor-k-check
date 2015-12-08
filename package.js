@@ -7,6 +7,12 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
+  var
+    legacyFiles,
+    checkFile,
+    symbolFile,
+    internalsFile;
+
   api.versionsFrom('1.2.1');
 
   api.use([
@@ -16,10 +22,24 @@ Package.onUse(function(api) {
 
   api.imply('korrigans:k');
 
-  api.addFiles([
-    'check.js',
-    'check-symbol.js'
-  ]);
+  legacyFiles = [
+    'legacy-patterns/array.js',
+    'legacy-patterns/match-integer.js',
+    'legacy-patterns/match-one-of.js',
+    'legacy-patterns/match-where.js',
+    'legacy-patterns/object.js',
+    'legacy-patterns/primitive-types.js'
+  ];
+  checkFile = 'check.js';
+  symbolFile = 'check-symbol.js';
+  internalsFile = 'internals.js';
+
+  //As all these files only feature declarations and no actual
+  //method calls, the order is not important.
+  api.addFiles(internalsFile);
+  api.addFiles(checkFile);
+  api.addFiles(legacyFiles);
+  api.addFiles(symbolFile);
 });
 
 Package.onTest(function(api) {
