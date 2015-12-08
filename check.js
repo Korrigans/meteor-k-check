@@ -1,16 +1,20 @@
+let warnedAboutMatchIncompatibilities = false;
+
 K.check = function KCheck(value, pattern) {
-  //Special legacy Match patterns
+  // Special legacy Match patterns
   const
-      matchAny = ['__any__'],
-      matchInteger = ['__integer__'];
+    matchAny = ['__any__'],
+    matchInteger = ['__integer__'];
 
 
-  //Custom K.check pattern
-  if(_.isObject(pattern) && pattern[K.check.custom]) {
+  // Custom K.check pattern
+  if (_.isObject(pattern) && pattern[K.check.custom]) {
     const testFunc = pattern[K.check.custom];
-    if(!_.isFunction(testFunc)) {
+
+    if (!_.isFunction(testFunc)) {
       throw new Error(
-        `${errorPrefix} Expected custom function to be a function, got ${typeof testFunc}`
+        `${errorPrefix} Expected custom function to be a function, `
+        + `got ${typeof testFunc}`
       );
     }
 
@@ -18,41 +22,43 @@ K.check = function KCheck(value, pattern) {
     return;
   }
 
-  //PRIMITIVE TESTS
-  if(primitiveMap.has(pattern)) {
+  // PRIMITIVE TESTS
+  if (primitiveMap.has(pattern)) {
     checkForPrimitive(value, pattern);
     return;
   }
 
-  //Match.Any
-  if(_.isEqual(pattern, matchAny)) return;
+  // Match.Any
+  if (_.isEqual(pattern, matchAny)) {
+    return;
+  }
 
-  //Match.Integer
-  if(_.isEqual(pattern, matchInteger)) {
+  // Match.Integer
+  if (_.isEqual(pattern, matchInteger)) {
     checkLegacyMatchInteger(value);
     return;
   }
 
-  //Legacy array pattern, looking like [pattern]
-  if(_.isArray(pattern)) {
+  // Legacy array pattern, looking like [pattern]
+  if (_.isArray(pattern)) {
     checkLegacyArray(value, pattern);
     return;
   }
 
-  //Match.OneOf
-  if(pattern.choices) {
+  // Match.OneOf
+  if (pattern.choices) {
     checkLegacyMatchOneOf(value, pattern);
     return;
   }
 
-  //Match.Where
-  if(_.isFunction(pattern.condition)) {
+  // Match.Where
+  if (_.isFunction(pattern.condition)) {
     checkLegacyWhere(value, pattern);
     return;
   }
 
-  //Legacy object pattern
-  if(_.isObject(pattern)) {
+  // Legacy object pattern
+  if (_.isObject(pattern)) {
     checkLegacyObject(value, pattern);
     return;
   }
@@ -65,9 +71,9 @@ K.check = function KCheck(value, pattern) {
   // There is no way we can differentiate them without including check.
   // Each uses the constructor pattern with a local variable, assigning
   // the same "pattern" field, making them indistinguishable.
-  if(pattern.pattern) {
-    if(!warnedAboutMatchIncompatibilities) {
-      //Throw an error instead?
+  if (pattern.pattern) {
+    if (!warnedAboutMatchIncompatibilities) {
+      // Throw an error instead?
       console.error(
         'K.check is incompatible with Match.Optional, Match.ObjectIncluding, '
         + 'and Match.ObjectWithValues due to a malfunction of the native check '
@@ -79,7 +85,7 @@ K.check = function KCheck(value, pattern) {
     return;
   }
 
-  //Some legacy primitive values tests
+  // Some legacy primitive values tests
   if (_.includes(['string', 'number', 'boolean'], typeof pattern)) {
     if (value !== pattern) {
       throw buildCheckError(value, pattern);
@@ -87,6 +93,6 @@ K.check = function KCheck(value, pattern) {
     return;
   }
 
-  //Nothing caught, unknown pattern
+  // Nothing caught, unknown pattern
   throw new Error(`${errorPrefix} Unknown pattern ${beautifyPattern(pattern)}`);
 };

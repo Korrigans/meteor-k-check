@@ -5,33 +5,35 @@ let warnedAboutMatchOneOf = false;
  * @param  {*} value   Value to check
  * @param  {{ choices : Array }} pattern Pattern to check value against
  * @throws {Error}  Value was not conform to pattern
+ * @returns {undefined}
  */
 checkLegacyMatchOneOf = function checkLegacyMatchOneOf(value, pattern) {
-  if(!warnedAboutMatchOneOf) {
+  if (!warnedAboutMatchOneOf) {
     console.warn(
-      'It looks like you are using Match.OneOf.\n' +
-      'K.Check tried to detect it, but might have misunderstood or conflicted.\n' +
+      'It looks like you are using Match.OneOf.\n'
+      + 'K.check tried to detect it, but might have misunderstood/conflicted.\n'
       // TODO: Once it's done, replace with actual API method (Like KP.OneOf or something)
-      'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
+      + 'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
     );
     warnedAboutMatchOneOf = true;
   }
   const choices = pattern.choices;
   let failedAttemps = 0;
 
-  for(let subPattern of choices) {
+  for (let subPattern of choices) {
     try {
       K.check(value, subPattern);
-    } catch (e) {
-      if(!_.contains(e.message, errorPrefix)) {
-        //Unknown error, propagate
+    }
+    catch (e) {
+      if (!_.includes(e.message, errorPrefix)) {
+        // Unknown error, propagate
         throw e;
       }
-      failedAttemps++;
+      failedAttemps += 1;
     }
   }
-  //Did _all_ attemps fail?
-  if(failedAttemps === choices.length) {
+  // Did _all_ attemps fail?
+  if (failedAttemps === choices.length) {
     throw buildCheckError(value, pattern);
   }
-}
+};

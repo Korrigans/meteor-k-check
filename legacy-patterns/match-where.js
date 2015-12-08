@@ -5,13 +5,14 @@ let warnedAboutMatchWhere = false;
  * @param  {*}                        value   Value to check
  * @param  {{ condition : Function }} pattern Match.Where pattern
  * @throws {Error}  Value was not conform to pattern
+ * @returns {undefined}
  */
 checkLegacyWhere = function checkLegacyWhere(value, pattern) {
-  if(!warnedAboutMatchWhere) {
+  if (!warnedAboutMatchWhere) {
     console.warn(
-      'It looks like you are using Match.Where.\n' +
-      'K.check tried to detect it, but might have misunderstood or conflicted.\n' +
-      'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
+      'It looks like you are using Match.Where.\n'
+      + 'K.check tried to detect it but might have misunderstood/conflicted.\n'
+      + 'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
     );
 
     warnedAboutMatchWhere = true;
@@ -21,9 +22,10 @@ checkLegacyWhere = function checkLegacyWhere(value, pattern) {
     testFunc = pattern.condition,
     testResult = testFunc(value);
 
-  if(!testResult) {
+  if (!testResult) {
     throw new Error(
-      `${errorPrefix} Failed Match.Where validation (${beautifyPattern(testFunc)}) with ${beautifyValue(value)}`
-    )
+      `${errorPrefix} Failed Match.Where validation `
+      + `(${beautifyPattern(testFunc)}) with ${beautifyValue(value)}`
+    );
   }
-}
+};
