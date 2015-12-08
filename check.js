@@ -14,7 +14,8 @@ const errorPrefix = '[K.check]';
 let
   warnedAboutMatchInteger = false,
   warnedAboutMatchIncompatibilities = false,
-  warnedAboutMatchOneOf = false;
+  warnedAboutMatchOneOf = false,
+  warnedAboutMatchWhere = false;
 
 // NOTE: Define beautifyPattern and beautifyValue on K?
 /**
@@ -81,7 +82,7 @@ function beautifyValue(value) {
   if(_.isObject(value)) {
     return `{ ${
       _.reduce(_.keys(value),
-        (accu, key) => `${accu}, ${key} : ${beautifyValue(value[key])}`,
+        (accu, key) => `${accu}, ${key}: ${beautifyValue(value[key])}`,
         ''
       //Remove leading ', '
       ).slice(2)
@@ -148,12 +149,19 @@ K.check = function KCheck(value, pattern) {
     return;
   }
 
-  //Legacy Match.OneOf pattern
+  //Match.OneOf
   if(pattern.choices) {
     checkLegacyMatchOneOf(value, pattern);
     return;
   }
 
+  //Match.Where
+  if(_.isFunction(pattern.condition)) {
+    checkLegacyWhere(value, pattern);
+    return;
+  }
+
+  //Legacy object pattern
   if(_.isObject(pattern)) {
     checkLegacyObject(value, pattern);
     return;
@@ -327,5 +335,28 @@ function checkLegacyObject(value, pattern) {
 
   for(let key in value) {
     K.check(value[key], pattern[key]);
+  }
+}
+
+function checkLegacyWhere(value, pattern) {
+  if(!warnedAboutMatchWhere) {
+    console.warn(
+      'It looks like you are using Match.Where.\n' +
+      'K.check tried to detect it, but might have misunderstood or conflicted.\n' +
+      // TODO: Once it's done, replace with actual API method (Like KP.OneOf or something)
+      'Prefer using korrigans:k-pattern http://github.com/Korrigans/k-pattern'
+    );
+
+    warnedAboutMatchWhere = true;
+  }
+
+  const
+    testFunc = pattern.condition,
+    testResult = testFunc(value);
+
+  if(!testResult) {
+    throw new Error(
+      `${errorPrefix} Failed Match.Where validation (${beautifyPattern(testFunc)}) with ${beautifyValue(value)}`
+    )
   }
 }
