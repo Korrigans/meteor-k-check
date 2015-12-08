@@ -73,3 +73,6 @@ beautifyValue = function beautifyValue(value) {
   // Use safe lodash toString
   return _(value).toString();
 };
+
+K.internals.check.beautifyValue = beautifyValue;
+K.internals.check.beautifyPattern = beautifyPattern;

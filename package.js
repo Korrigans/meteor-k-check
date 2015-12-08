@@ -20,6 +20,7 @@ Package.onUse(function onUse(api) {
 
   api.use([
     'korrigans:k@0.1.0',
+    'stevezhu:lodash@3.10.1',
     'ecmascript'
   ]);
 
@@ -36,6 +37,7 @@ Package.onUse(function onUse(api) {
   checkFile = 'check.js';
   symbolFile = 'check-symbol.js';
   internalsFiles = [
+    'internals/namespace.js',
     'internals/primitive-map.js',
     'internals/beautifiers.js',
     'internals/error-builder.js'
@@ -43,7 +45,6 @@ Package.onUse(function onUse(api) {
 
   // As all these files only feature declarations and no actual
   // method calls, the order is not important.
-
   api.addFiles(internalsFiles);
   api.addFiles(checkFile);
   api.addFiles(legacyFiles);

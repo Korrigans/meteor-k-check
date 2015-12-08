@@ -9,3 +9,5 @@ primitiveMap.set(Object, 'object');
 // NOTE: These two last values are only used for beautification purposes
 primitiveMap.set(undefined, 'undefined');
 primitiveMap.set(null, 'null');
+
+K.internals.check.primitiveMap = primitiveMap;

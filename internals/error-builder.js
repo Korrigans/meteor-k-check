@@ -15,3 +15,5 @@ buildCheckError = function buildCheckError(value, pattern) {
 
   return new Error(errorMessage);
 };
+
+K.internals.check.buildCheckError = buildCheckError;
