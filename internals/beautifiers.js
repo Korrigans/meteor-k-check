@@ -1,17 +1,3 @@
-primitiveMap = new Map();
-
-// NOTE: These first values are used to test against the typeof operator
-primitiveMap.set(Boolean, 'boolean');
-primitiveMap.set(Number, 'number');
-primitiveMap.set(String, 'string');
-primitiveMap.set(Function, 'function');
-primitiveMap.set(Object, 'object');
-// NOTE: These two last values are only used for beautification purposes
-primitiveMap.set(undefined, 'undefined');
-primitiveMap.set(null, 'null');
-
-errorPrefix = '[K.check]';
-
 // NOTE: Define beautifyPattern and beautifyValue on K?
 /**
  * Turn a pattern into an elegant string
@@ -86,21 +72,4 @@ beautifyValue = function beautifyValue(value) {
 
   // Use safe lodash toString
   return _(value).toString();
-};
-
-/**
- * Error factory, generates a pretty error message
- * @private
- * @param  {*} value   Value to use when generating error
- * @param  {*} pattern Pattern to use when generating error
- * @return {Error}     Generated error
- */
-buildCheckError = function buildCheckError(value, pattern) {
-  const
-    beautifiedPattern = beautifyPattern(pattern),
-    beautifiedValue = beautifyValue(value),
-    errorMessage
-      = `${errorPrefix} Expected ${beautifiedPattern}, got ${beautifiedValue}.`;
-
-  return new Error(errorMessage);
 };

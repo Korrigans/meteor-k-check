@@ -14,7 +14,7 @@ Package.onUse(function onUse(api) {
   var legacyFiles,
     checkFile,
     symbolFile,
-    internalsFile;
+    internalsFiles;
 
   api.versionsFrom('1.2.1');
 
@@ -35,12 +35,16 @@ Package.onUse(function onUse(api) {
   ];
   checkFile = 'check.js';
   symbolFile = 'check-symbol.js';
-  internalsFile = 'internals.js';
+  internalsFiles = [
+    'internals/primitive-map.js',
+    'internals/beautifiers.js',
+    'internals/error-builder.js'
+  ];
 
   // As all these files only feature declarations and no actual
   // method calls, the order is not important.
 
-  api.addFiles(internalsFile);
+  api.addFiles(internalsFiles);
   api.addFiles(checkFile);
   api.addFiles(legacyFiles);
   api.addFiles(symbolFile);
