@@ -1,6 +1,6 @@
 // Bring back beautifiers for pretty test descriptions
 const [beautifyValue, beautifyPattern]
- = [K.internals.check.beautifyValue, K.internals.check.beautifyPattern];
+ = [K.Internals.check.beautifyValue, K.Internals.check.beautifyPattern];
 
 describe('[k-check][Unit] K.check', () => {
   it('should be defined', () => {

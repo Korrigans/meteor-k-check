@@ -10,4 +10,4 @@ primitiveMap.set(Object, 'object');
 primitiveMap.set(undefined, 'undefined');
 primitiveMap.set(null, 'null');
 
-K.internals.check.primitiveMap = primitiveMap;
+K.Internals.check.primitiveMap = primitiveMap;

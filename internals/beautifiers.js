@@ -74,5 +74,5 @@ beautifyValue = function beautifyValue(value) {
   return _(value).toString();
 };
 
-K.internals.check.beautifyValue = beautifyValue;
-K.internals.check.beautifyPattern = beautifyPattern;
+K.Internals.check.beautifyValue = beautifyValue;
+K.Internals.check.beautifyPattern = beautifyPattern;
