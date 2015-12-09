@@ -29,6 +29,11 @@ checkLegacyObject = function checkLegacyObject(value, pattern) {
 
   for (let key in value) {
     if (value.hasOwnProperty(key)) {
+      buildCheckError.path.push({
+        direction: `key ${key}`,
+        of: value,
+        against: pattern
+      });
       K.check(value[key], pattern[key]);
     }
   }

@@ -15,7 +15,14 @@ checkLegacyArray = function checkLegacyArray(value, pattern) {
     throw buildCheckError(value, pattern);
   }
 
-  for (let entry of value) {
-    K.check(entry, pattern[0]);
+  for (let index in value) {
+    if (value.hasOwnProperty(index)) {
+      buildCheckError.path.push({
+        direction: `index ${index}`,
+        of: value,
+        against: pattern
+      });
+      K.check(value[index], pattern[0]);
+    }
   }
 };
