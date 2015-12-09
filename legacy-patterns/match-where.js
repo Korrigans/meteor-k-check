@@ -23,9 +23,9 @@ checkLegacyWhere = function checkLegacyWhere(value, pattern) {
     testResult = testFunc(value);
 
   if (!testResult) {
-    throw new Error(
-      `${errorPrefix} Failed Match.Where validation `
-      + `(${beautifyPattern(testFunc)}) with ${beautifyValue(value)}`
+    throw buildCheckError(
+      testResult,
+      `Match.Where validator ${beautifyPattern(testFunc)} to return truthy value`
     );
   }
 };
