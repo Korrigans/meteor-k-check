@@ -69,5 +69,5 @@ Package.onTest(function onTest(api) {
     'check'
   ]);
 
-  api.addFiles('check-tests.js');
+  api.addFiles('tests/main.js');
 });
