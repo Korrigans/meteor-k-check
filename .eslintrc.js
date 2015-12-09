@@ -709,6 +709,7 @@ module.exports = {
     }
   },
   globals: {
+    // main package
     K: true,
     checkLegacyWhere: true,
     checkForPrimitive: true,
@@ -716,11 +717,25 @@ module.exports = {
     checkLegacyArray: true,
     checkLegacyObject: true,
     checkLegacyMatchOneOf: true,
+    errorPrefix: true,
+    buildCheckError: true,
+    primitiveMap: true,
 
+    // tests
     beautifyPattern: true,
     beautifyValue: true,
-    buildCheckError: true,
-    errorPrefix: true,
-    primitiveMap: true
+    matches: true,
+    fails: true,
+    primitiveValues: true,
+    testArray: true,
+    testCustomFunctions: true,
+    testMatchAny: true,
+    testMatchInteger: true,
+    testMatchOneOf: true,
+    testMatchWhere: true,
+    testObject: true,
+    testPrimitiveTypes: true,
+    matchAny: true,
+    matchInteger: true
   }
 };

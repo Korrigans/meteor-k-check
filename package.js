@@ -69,5 +69,18 @@ Package.onTest(function onTest(api) {
     'check'
   ]);
 
-  api.addFiles('tests/main.js');
+  api.addFiles([
+    'tests/constants.js',
+
+    'tests/subs/array.js',
+    'tests/subs/custom_functions.js',
+    'tests/subs/match-any.js',
+    'tests/subs/match-integer.js',
+    'tests/subs/match-one-of.js',
+    'tests/subs/match-where.js',
+    'tests/subs/object.js',
+    'tests/subs/primitive-types.js',
+
+    'tests/main.js'
+  ]);
 });
