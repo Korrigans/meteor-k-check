@@ -18,7 +18,8 @@ K.check = function KCheck(value, pattern) {
       );
     }
 
-    testFunc(value);
+    // NOTE: We are not using testFunc here to preserve context
+    pattern[K.check.custom](value);
     return;
   }
 

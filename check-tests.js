@@ -475,6 +475,19 @@ describe('[k-check][Unit] K.check', () => {
       expect(testFunc.calls.count()).toEqual(1);
     });
 
+    it('should preserve pattern context when running custom function', () => {
+      /*
+        eslint consistent-this:0 no-invalid-this:0
+       */
+      let calledContext = null;
+      const
+        registerThis = function registerThis() { calledContext = this; },
+        testPattern = { [K.check.custom]: registerThis };
+
+      K.check('some value', testPattern);
+      expect(calledContext === testPattern).toEqual(true);
+    });
+
     it('shoud propagate error thrown by custom function', () => {
       const
         testErrorMessage = 'Something went right',
