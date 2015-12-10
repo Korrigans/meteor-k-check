@@ -64,12 +64,12 @@ K.check(0, 42);
 
 // Error: [K.check] Expected Match.OneOf(string, number, 42), got null.
 K.check(null, Match.OneOf(String, Number, 42));
-// Comparison with native package:
+// Legacy error:
 // Error: Match error: Failed Match.OneOf or Match.Optional validation
 check(null, Match.OneOf(String, Number, 42));
 
 // Error: [K.check] Expected { foo: string, bar: number, korrigans: function },
-// got { foo: "foo", bar: 0, baz: true }. (excess: baz; missing: korrigans)
+// got { foo: "foo", bar: 0, baz: true } (excess: baz; missing: korrigans).
 K.check({
   foo: 'foo',
   bar: 0,
@@ -79,16 +79,22 @@ K.check({
   bar: Number,
   korrigans: Function
 });
-// Comparison with native package:
+// Legacy error:
 // Error: Match error: Unknown key in field baz
-check({/* ... */ baz : true }, { foo : String, /* ... */});
-```
 
+// Error: [K.check] Expected number,
+// got "foo" at index 3 of [5, 10, 15, "foo"] against [number].
+K.check([5, 10, 15, 'foo'], [Number]);
+// Legacy error:
+// Error: Match error: Expected number, got string in field [3]
+```
 
 You can also extend the possibilities of `K.check` by
 defining your own patterns and test functions.
 
 ## Advanced
+
+### Custom patterns
 
 To allow the use of custom functions `K.check` provides a [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol) (basically a hidden property) to be placed
 on objects: `K.check.custom`.
@@ -179,6 +185,54 @@ K.check({
 
 K.check('foo', todayPattern);
 ```
+
+### K.ErrorLog
+
+Some patterns can generate very lengthy error messages:
+
+```javascript
+K.check({
+  foo : {
+    bar : {
+      baz : [3, 6, 9, 'dwarf']
+    }
+  }
+}, {
+  foo : {
+    bar : {
+      baz : [Number]
+    }
+  }
+});
+// Error: [K.check] Expected number, got "dwarf"
+// at index 3 of [3, 6, 9, "dwarf"] against [number] (K.ErrorLog.Check[0]).
+```
+
+The full path is not in the error message as it would get very long.  
+Instead only last path is reported.
+
+Here, full path is stored at log indicated at end of error message:
+
+```javascript
+K.ErrorLog.Check[0]
+```
+
+This log has following structure:
+
+```javascript
+{
+  message: 'Expected number, got "dwarf" at index 3 of [3, 6, 9, "dwarf"] against [number]',
+  path : [
+    'key foo of { foo: { bar: { baz: [3, 6, 9, "dwarf"] } } } against { foo: { bar: { baz: [number] } } }',
+    'key bar of { bar: { baz: [3, 6, 9, "dwarf"] } } against { bar: { baz: [number] } }',
+    'key baz of { baz: [3, 6, 9, "dwarf"] } against { baz: [number] }'
+  ]
+}
+```
+
+This is a complete trace of each recursive call run by `K.check`.  
+It provides exact error message in `message` field, and each step of validation
+in `path`. `path` is an array ordered from outer to inner of value and pattern.
 
 ## Limitations
 

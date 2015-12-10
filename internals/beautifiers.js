@@ -10,14 +10,17 @@ beautifyPattern = function beautifyPattern(pattern) {
   if (primitiveMap.has(pattern)) {
     return `${primitiveMap.get(pattern)}`;
   }
+
   // Legacy constructor pattern
   if (_.isFunction(pattern)) {
     return pattern.name ? `function ${pattern.name}` : 'anonymous function';
   }
+
   // Legacy array pattern
   if (_.isArray(pattern)) {
     return `[${beautifyPattern(pattern[0])}]`;
   }
+
   // Legacy Match.OneOf pattern
   if (_.isArray(pattern.choices)) {
     return `Match.OneOf(${
@@ -28,6 +31,7 @@ beautifyPattern = function beautifyPattern(pattern) {
       ).slice(2)
     })`;
   }
+
   if (_.isObject(pattern)) {
     return `{ ${
       _.reduce(_.keys(pattern),
@@ -38,7 +42,11 @@ beautifyPattern = function beautifyPattern(pattern) {
     } }`;
   }
 
-  return pattern;
+  if (_.isNumber(pattern) || _.has(pattern, 'toString')) {
+    return `${pattern}`;
+  }
+
+  return 'Unknown pattern';
 };
 
 /**
@@ -51,15 +59,18 @@ beautifyValue = function beautifyValue(value) {
   if (_.isString(value)) {
     return `"${value}"`;
   }
+
   if (_.isArray(value)) {
     return `[${_.reduce(value,
       (accu, entry) => `${accu}, ${beautifyValue(entry)}`,
       ''
     ).slice(2)}]`;
   }
+
   if (_.isFunction(value)) {
     return value.name ? `function ${value.name}` : 'anonymous function';
   }
+
   if (_.isObject(value)) {
     return `{ ${
       _.reduce(_.keys(value),
@@ -70,8 +81,11 @@ beautifyValue = function beautifyValue(value) {
     } }`;
   }
 
-  // Use safe lodash toString
-  return _(value).toString();
+  if (_.isNumber(value) || _.has(value, 'toString')) {
+    return `${value}`;
+  }
+
+  return 'Unknown value';
 };
 
 K.Internals.check.beautifyValue = beautifyValue;

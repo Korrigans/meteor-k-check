@@ -1,5 +1,7 @@
 /**
- * Check value against legacy pattern
+ * Check value against legacy pattern.
+ * This pattern is recursive, so it populates buildCheckError.path with
+ * current index, of current array value, against current pattern
  * @param  {*} value   Value to check
  * @param  {*[]} pattern Legacy array pattern, like [String]
  * @throws {Error}  Value was not conform to pattern

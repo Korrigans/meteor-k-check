@@ -1,5 +1,7 @@
 /**
- * Check a value against legacy plain object pattern
+ * Check a value against legacy plain object pattern.
+ * This pattern is recursive, it populates buildCheckError.path with
+ * current key of current object value against current pattern
  * @param  {*}      value   Value to check
  * @param  {Object} pattern Object to check value against
  * @throws {Error}  Value was not conform to pattern
@@ -17,14 +19,15 @@ checkLegacyObject = function checkLegacyObject(value, pattern) {
     missingKeys = _.difference(patternKeys, valueKeys);
 
   if (excessKeys.length > 0 || missingKeys.length > 0) {
-    const error = buildCheckError(value, pattern);
+    const
+      eK = excessKeys,
+      mK = missingKeys,
 
-    error.message
-    += ` (${excessKeys.length > 0 ? `excess: ${excessKeys.join(', ')}` : ''}`
-    + `${excessKeys.length > 0 && missingKeys.length > 0 ? '; ' : ''}`
-    + `${missingKeys.length > 0 ? `missing: ${missingKeys.join(', ')}` : ''})`;
+      message = `(${eK.length > 0 ? `excess: ${eK.join(', ')}` : ''}`
+        + `${eK.length > 0 && mK.length > 0 ? '; ' : ''}`
+        + `${mK.length > 0 ? `missing: ${mK.join(', ')}` : ''})`;
 
-    throw error;
+    throw buildCheckError(value, pattern, message);
   }
 
   for (let key in value) {

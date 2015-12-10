@@ -1,5 +1,34 @@
 let warnedAboutMatchIncompatibilities = false;
 
+/**
+ * Runs a validation of a value against a pattern
+ * The value can be anything, pattern can either be
+ *  - A legacy Match.pattern such as Match.Where
+ *  - A custom K.check pattern recognized by a Symbol
+ * If validation was not succesfull, a descriptive error is thrown
+ * If recursivity is used (legacy array and object patterns), the validation
+ * path (object keys, array indexes) is tracked and provided in errors.
+ * @param  {*} value   Value to validate
+ * @param  {*} pattern Pattern against which to validate
+ * @throws {Error}     Descriptive error if validation failed
+ * @throws {Error}     Pattern was not recognized
+ * @return {undefined}
+ * @example
+ * K.check(123, Number); // Passes
+ * K.check(new Date(), Date); // Passes
+ * K.check({
+ *   foo: 'foo value'
+ * }, { foo: String }); // Passes
+ *
+ * K.check([{
+ *   foo: 'foo value',
+ *   bar: true
+ * }], [{ foo: String, bam: null}]); //Fails with:
+ * Error: [K.check] Expected { foo: string, bam: null }, got { foo: "foo value",
+ *  bar: Unknown value } (excess: bar; missing: bam)
+ *  at index 0 of [{ foo: "foo value", bar: Unknown value }]
+ *  against [{ foo: string, bam: null }]
+ */
 K.check = function KCheck(value, pattern) {
   // Special legacy Match patterns
   const
@@ -11,7 +40,7 @@ K.check = function KCheck(value, pattern) {
    * @return {Function} Proper function to run for this specific pattern
    */
   function getCheck() {
-    // Custom K.check pattern
+    // Custom K.check pattern detected via Symbol
     if (_.isObject(pattern) && pattern[K.check.custom]) {
       const testFunc = pattern[K.check.custom];
 
@@ -88,7 +117,7 @@ K.check = function KCheck(value, pattern) {
 
     // Some legacy primitive values tests
     if (_.includes(['string', 'number', 'boolean'], typeof pattern)) {
-      return function() {
+      return function checkForExactValues() {
         if (value !== pattern) {
           throw buildCheckError(value, pattern);
         }
@@ -96,9 +125,19 @@ K.check = function KCheck(value, pattern) {
     }
 
     // Nothing caught, unknown pattern
-    throw new Error(`${errorPrefix} Unknown pattern ${beautifyPattern(pattern)}`);
+    // First empty buildCheckError.path, then throw
+    while (buildCheckError.path.length > 0) {
+      buildCheckError.path.pop();
+    }
+    throw new Error(
+      `${errorPrefix} Could not recognize: ${beautifyPattern(pattern)}`
+    );
   }
 
   getCheck()(value, pattern);
+
+  // If we reached here, it means the above check didn't throw.
+  // Hence, we can remove last path element as it is no longer needed for error
+  // reporting (there's no error to be reported)
   buildCheckError.path.pop();
 };
