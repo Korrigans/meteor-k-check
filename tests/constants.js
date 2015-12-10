@@ -1,4 +1,3 @@
-// Bring back beautifiers for pretty test descriptions
 [beautifyValue, beautifyPattern]
  = [K.Internals.check.beautifyValue, K.Internals.check.beautifyPattern];
 
@@ -41,12 +40,6 @@ fails = (value, pattern, message) => {
       );
     }
     else {
-      const
-        logEntry = _.last(K.ErrorLog.Check),
-        actual = _.includes(error.message, logEntry.message),
-        expected = true;
-
-      expect(actual).toEqual(expected);
       done();
     }
   });

@@ -51,6 +51,14 @@ Package.onUse(function onUse(api) {
 });
 
 Package.onTest(function onTest(api) {
+  var
+    constantsFile = [],
+    mainFile = [],
+    patternFiles = [],
+    internalsFiles = [],
+
+    integrationFiles = [];
+
   api.use([
     'ecmascript',
     'sanjo:jasmine@0.20.2',
@@ -68,9 +76,22 @@ Package.onTest(function onTest(api) {
     'check'
   ]);
 
-  api.addFiles([
-    'tests/constants.js',
+  constantsFile.push(
+    'tests/constants.js'
+  );
 
+  internalsFiles.push(
+    'tests/internals/namespace.js',
+    'tests/internals/primitive-map.js',
+    'tests/internals/beautifiers.js',
+    'tests/internals/error-builder.js'
+  );
+
+  mainFile.push(
+    'tests/main.js'
+  );
+
+  patternFiles.push(
     'tests/subs/array.js',
     'tests/subs/custom_functions.js',
     'tests/subs/match-any.js',
@@ -78,8 +99,17 @@ Package.onTest(function onTest(api) {
     'tests/subs/match-one-of.js',
     'tests/subs/match-where.js',
     'tests/subs/object.js',
-    'tests/subs/primitive-types.js',
+    'tests/subs/primitive-types.js'
+  );
 
-    'tests/main.js'
-  ]);
+  integrationFiles.push(
+    'tests/integration/path.js'
+  );
+
+  api.addFiles(constantsFile);
+  api.addFiles(internalsFiles);
+  api.addFiles(patternFiles);
+  api.addFiles(mainFile);
+
+  api.addFiles(integrationFiles);
 });

@@ -51,23 +51,25 @@ testCustomFunctions = function testCustomFunctions() {
 
       expect(
         () => K.check(testValue, testPattern)
-      ).toThrowError(Error, testErrorMessage);
+      ).toThrowError(Error, new RegExp(testErrorMessage));
     });
 
-    it('should throw an error if custom function is not function', () => {
-      const
-        testPattern = {
-          [K.check.custom]: 'not a function'
-        },
+    describe('errors', () => {
+      it('should throw an error if custom function is not function', () => {
+        const
+          testPattern = {
+            [K.check.custom]: 'not a function'
+          },
 
-        // NOTE: We're expecting K.check to go bonk, value is not important
-        testValue = 'some test value';
+          // NOTE: We're expecting K.check to go bonk, value is not important
+          testValue = 'some test value';
 
-      expect(
-        () => K.check(testValue, testPattern)
-      ).toThrowError(Error,
-        '[K.check] Expected custom function to be a function, got string'
-      );
+        expect(
+          () => K.check(testValue, testPattern)
+        ).toThrowError(Error,
+          '[K.check] Expected custom function to be a function, got string'
+        );
+      });
     });
   });
 };

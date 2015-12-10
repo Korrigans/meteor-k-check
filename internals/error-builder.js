@@ -33,18 +33,23 @@ buildCheckError = function buildCheckError(value, pattern, optMessage) {
     errorMessage += ` against ${beautifyPattern(lastPath.against)}`;
   }
 
-  // In buildCheckError.path each path is stored as a direction, a value,
-  // and a pattern. We need to build some kind of stack trace from these values.
-  const logEntry = K.ErrorLog.log(errorKey, {
-    message: errorMessage,
-    path: _.map(buildCheckError.path, ({ direction, of, against }) =>
-      `${direction} of ${beautifyValue(of)} against ${beautifyPattern(against)}`
-    )
-  });
 
-  // Finally, prefix the error with the and suffix
-  errorMessage
-    = `${errorPrefix} ${errorMessage} (K.ErrorLog.Check[${logEntry}]).`;
+  // There is still some elements in the path, log it and notify user
+  if (buildCheckError.path.length > 0) {
+    // In buildCheckError.path each path is stored as a direction, a value,
+    // and a pattern. We need to build some kind of stack trace from these values.
+    const logEntry = K.ErrorLog.log(errorKey, {
+      message: errorMessage,
+      path: _.map(buildCheckError.path, ({ direction, of, against }) =>
+        `${direction} of ${beautifyValue(of)} against ${beautifyPattern(against)}`
+      )
+    });
+
+    errorMessage += ` (K.ErrorLog.Check[${logEntry}])`;
+  }
+
+  // Add prettiness ----------------------------v
+  errorMessage = `${errorPrefix} ${errorMessage}.`;
 
   // Empty path
   while (buildCheckError.path.length > 0) {
@@ -74,5 +79,47 @@ buildCheckError = function buildCheckError(value, pattern, optMessage) {
  * });
  */
 buildCheckError.path = [];
+
+buildCheckError.path.removeLast = () => {
+  const lastElem = _.last(buildCheckError.path);
+
+  if (lastElem && !lastElem.locked) {
+    buildCheckError.path.pop();
+  }
+};
+
+buildCheckError.path.lock = () => {
+  const elemToLock = _.last(buildCheckError.path);
+
+  if (!elemToLock) {
+    throw new Error('corrupted path: path empty, can not lock');
+  }
+  if (elemToLock.locked) {
+    throw new Error('corrupted path: tried to overlock an element');
+  }
+
+  elemToLock.locked = true;
+};
+
+buildCheckError.path.unlock = () => {
+  if (buildCheckError.path.length === 0) {
+    throw new Error('corrupted path: path empty, can not unlock');
+  }
+  const elemToUnlock = _.findLast(buildCheckError.path, elem => elem.locked);
+
+  if (!elemToUnlock) {
+    throw new Error('corrupted path: could not find any locked element');
+  }
+
+  delete elemToUnlock.locked;
+};
+
+const notEnumerable = { enumerable: false };
+
+Object.defineProperties(buildCheckError.path, {
+  lock: notEnumerable,
+  unlock: notEnumerable,
+  removeLast: notEnumerable
+});
 
 K.Internals.check.buildCheckError = buildCheckError;

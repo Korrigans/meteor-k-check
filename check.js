@@ -53,7 +53,22 @@ K.check = function KCheck(value, pattern) {
       // NOTE: We are not using testFunc here to preserve context
       // It is also why we are using an enclosing function
       return function doCustomtest() {
-        pattern[K.check.custom](value);
+        let error = null;
+
+        try {
+          pattern[K.check.custom](value);
+        }
+        catch (e) {
+          error = e;
+        }
+
+        if (error !== null) {
+          throw buildCheckError(
+            value,
+            `custom pattern ${beautifyPattern(testFunc)}`,
+            `(error : ${error.message})`
+          );
+        }
       };
     }
 

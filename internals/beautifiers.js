@@ -42,11 +42,12 @@ beautifyPattern = function beautifyPattern(pattern) {
     } }`;
   }
 
-  if (_.isNumber(pattern) || _.has(pattern, 'toString')) {
+  try {
     return `${pattern}`;
   }
-
-  return 'Unknown pattern';
+  catch (e) {
+    return 'Unknown value';
+  }
 };
 
 /**
@@ -81,11 +82,12 @@ beautifyValue = function beautifyValue(value) {
     } }`;
   }
 
-  if (_.isNumber(value) || _.has(value, 'toString')) {
+  try {
     return `${value}`;
   }
-
-  return 'Unknown value';
+  catch (e) {
+    return 'Unknown value';
+  }
 };
 
 K.Internals.check.beautifyValue = beautifyValue;
