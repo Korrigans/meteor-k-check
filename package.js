@@ -1,8 +1,7 @@
 Package.describe({
   name: 'korrigans:k-check',
   version: '0.1.0',
-  // TODO
-  summary: '',
+  summary: 'Extensible, informative check package compatible with native check patterns and more',
   git: 'https://github.com/Korrigans/meteor-k-check.git',
   documentation: 'README.md'
 });
