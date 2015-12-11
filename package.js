@@ -18,10 +18,12 @@ Package.onUse(function onUse(api) {
   api.versionsFrom('1.2.1');
 
   api.use([
+    'ecmascript',
     'korrigans:k@0.1.0',
-    'stevezhu:lodash@3.10.1',
-    'ecmascript'
+    'stevezhu:lodash@3.10.1'
   ]);
+
+  api.use('korrigans:k-debug@0.1.0', { weak: true });
 
   api.imply('korrigans:k');
 
@@ -63,6 +65,7 @@ Package.onTest(function onTest(api) {
   api.use([
     'ecmascript',
     'sanjo:jasmine@0.20.2',
+    'korrigans:k-debug@0.1.0',
     'korrigans:k-check',
     'stevezhu:lodash@3.10.1',
 
@@ -72,7 +75,7 @@ Package.onTest(function onTest(api) {
 
   // Console tests convenience
   api.imply([
-    'korrigans:k',
+    'korrigans:k@0.1.0',
     'stevezhu:lodash@3.10.1',
     'check'
   ]);

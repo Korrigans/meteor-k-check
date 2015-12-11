@@ -49,18 +49,19 @@ describe('[k-check][Integration] K.Internals.check.buildCheckError.path vs K.che
     expect(bCE.path.unlock.calls.count()).toEqual(1);
   });
 
+  /* eslint no-magic-numbers: 0 */
   it('should empty path as tests go', () => {
     spyOn(bCE.path, 'removeLast').and.callThrough();
 
     K.check(['foo'], [String]);
 
-    expect(bCE.path.removeLast.calls.count()).toEqual(1);
+    expect(bCE.path.removeLast.calls.count()).toEqual(2);
 
     K.check({
       bar: true
     }, { bar: Boolean });
 
-    expect(bCE.path.removeLast.calls.count()).toEqual(2);
+    expect(bCE.path.removeLast.calls.count()).toEqual(4);
   });
 
   it('should empty path entirely if check fails', () => {

@@ -24,4 +24,10 @@ checkCustomFunction = function checkCustomFunction(value, pattern) {
       `(error : ${error.message})`
     );
   }
+
+  buildCheckError.path.push({
+    direction: `custom validation`,
+    of: value,
+    against: beautifyPattern(pattern)
+  });
 };

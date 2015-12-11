@@ -127,5 +127,5 @@ K.check = function KCheck(value, pattern) {
   // If we reached here, it means the above check didn't throw.
   // Hence, we can remove last path element as it is no longer needed for error
   // reporting (there's no error to be reported)
-  buildCheckError.path.pop();
+  buildCheckError.path.removeLast();
 };
