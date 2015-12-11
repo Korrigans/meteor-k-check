@@ -33,13 +33,19 @@ beautifyPattern = function beautifyPattern(pattern) {
   }
 
   if (_.isObject(pattern)) {
-    return `{ ${
+    let message = `{ ${
       _.reduce(_.keys(pattern),
         (accu, key) => `${accu}, ${key}: ${beautifyPattern(pattern[key])}`,
         ''
       // Remove leading ', '
     ).slice(2)
     } }`;
+
+    if (pattern[K.check.custom]) {
+      message = `${pattern[K.check.custom].name} CustomValidator${message}`;
+    }
+
+    return message;
   }
 
   try {
