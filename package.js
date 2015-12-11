@@ -27,6 +27,7 @@ Package.onUse(function onUse(api) {
 
   legacyFiles = [
     'legacy-patterns/array.js',
+    'legacy-patterns/custom-functions.js',
     'legacy-patterns/match-integer.js',
     'legacy-patterns/match-one-of.js',
     'legacy-patterns/match-where.js',
@@ -89,7 +90,7 @@ Package.onTest(function onTest(api) {
 
   patternFiles.push(
     'tests/units/subs/array.js',
-    'tests/units/subs/custom_functions.js',
+    'tests/units/subs/custom-functions.js',
     'tests/units/subs/match-any.js',
     'tests/units/subs/match-integer.js',
     'tests/units/subs/match-one-of.js',
@@ -100,7 +101,7 @@ Package.onTest(function onTest(api) {
 
   mainFile.push(
     'tests/units/main.js'
-  );  
+  );
 
   integrationFiles.push(
     'tests/integrations/path.js'

@@ -42,34 +42,7 @@ K.check = function KCheck(value, pattern) {
   function getCheck() {
     // Custom K.check pattern detected via Symbol
     if (_.isObject(pattern) && pattern[K.check.custom]) {
-      const testFunc = pattern[K.check.custom];
-
-      if (!_.isFunction(testFunc)) {
-        throw new Error(
-          `${errorPrefix} Expected custom function to be a function, `
-          + `got ${typeof testFunc}`
-        );
-      }
-      // NOTE: We are not using testFunc here to preserve context
-      // It is also why we are using an enclosing function
-      return function doCustomtest() {
-        let error = null;
-
-        try {
-          pattern[K.check.custom](value);
-        }
-        catch (e) {
-          error = e;
-        }
-
-        if (error !== null) {
-          throw buildCheckError(
-            value,
-            `custom pattern ${beautifyPattern(testFunc)}`,
-            `(error : ${error.message})`
-          );
-        }
-      };
+      return checkCustomFunction;
     }
 
     // PRIMITIVE TESTS
