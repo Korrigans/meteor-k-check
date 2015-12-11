@@ -81,7 +81,7 @@ Package.onTest(function onTest(api) {
   ]);
 
   constantsFile.push(
-    'tests/units/constants.js'
+    'tests/constants.js'
   );
 
   internalsFiles.push(
@@ -103,10 +103,19 @@ Package.onTest(function onTest(api) {
   );
 
   mainFile.push(
-    'tests/units/main.js'
+    'tests/units/namespace.js'
   );
 
   integrationFiles.push(
+    'tests/integrations/k-check/array.js',
+    'tests/integrations/k-check/custom-functions.js',
+    'tests/integrations/k-check/match-any.js',
+    'tests/integrations/k-check/match-integer.js',
+    'tests/integrations/k-check/match-one-of.js',
+    'tests/integrations/k-check/match-where.js',
+    'tests/integrations/k-check/object.js',
+    'tests/integrations/k-check/primitive-types.js',
+    'tests/integrations/k-check.js',
     'tests/integrations/path.js'
   );
 

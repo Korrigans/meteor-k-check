@@ -22,7 +22,7 @@ addTest(function someFunc() {},
 
 addTest({ foo: { bar: null } }, '{ foo: { bar: null } }', 'format objects');
 
-describe('[k-check][Unit] K.Internals.check.beautifyValue', () => {
+describe('[k-check][Unit] beautifyValue', () => {
   it('should be a function', () => {
     const
       expected = 'function',
@@ -69,7 +69,7 @@ describe('[k-check][Unit] K.Internals.check.beautifyValue', () => {
   }
 });
 
-describe('[k-check][Unit] K.Internals.check.beautifyPattern', () => {
+describe('[k-check][Unit] beautifyPattern', () => {
   it('should be a function', () => {
     const
       expected = 'function',

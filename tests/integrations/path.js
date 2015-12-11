@@ -1,6 +1,6 @@
 const bCE = K.Internals.check.buildCheckError;
 
-describe('[k-check][Integration] K.Internals.check.buildCheckError.path vs K.check', () => {
+describe('[k-check][Integration] buildCheckError.path vs K.check', () => {
   it('should populate path when checking against recursive patterns', () => {
     spyOn(bCE.path, 'push').and.callThrough();
 
@@ -65,13 +65,14 @@ describe('[k-check][Integration] K.Internals.check.buildCheckError.path vs K.che
   });
 
   it('should empty path entirely if check fails', () => {
+    /*
     try {
       K.check([[['foo']]], [[[Number]]]);
     }
     catch (e) {
       e.message = '';
-    }
-
+    }*/
+    expect(() => K.check([[['foo']]], [[[Number]]])).toThrow();
     expect(bCE.path.length).toEqual(0);
   });
 });

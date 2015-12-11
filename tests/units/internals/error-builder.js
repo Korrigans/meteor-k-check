@@ -1,6 +1,6 @@
 const bCE = K.Internals.check.buildCheckError;
 
-describe('[k-check][Unit] K.Internals.check.buildCheckError', () => {
+describe('[k-check][Unit] buildCheckError', () => {
   it('should be a function', () => {
     const
       expected = 'function',

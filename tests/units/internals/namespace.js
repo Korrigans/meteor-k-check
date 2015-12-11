@@ -1,5 +1,5 @@
-describe('[k-check][Unit] K.Internals.check', () => {
-  it('should be defined', () => {
+describe('[k-check][k-debug][Unit] K.Internals.check', () => {
+  it('should be defined on tests', () => {
     const
       expected = 'object',
       actual = typeof K.Internals.check;
