@@ -77,33 +77,33 @@ Package.onTest(function onTest(api) {
   ]);
 
   constantsFile.push(
-    'tests/constants.js'
+    'tests/units/constants.js'
   );
 
   internalsFiles.push(
-    'tests/internals/namespace.js',
-    'tests/internals/primitive-map.js',
-    'tests/internals/beautifiers.js',
-    'tests/internals/error-builder.js'
-  );
-
-  mainFile.push(
-    'tests/main.js'
+    'tests/units/internals/namespace.js',
+    'tests/units/internals/primitive-map.js',
+    'tests/units/internals/beautifiers.js',
+    'tests/units/internals/error-builder.js'
   );
 
   patternFiles.push(
-    'tests/subs/array.js',
-    'tests/subs/custom_functions.js',
-    'tests/subs/match-any.js',
-    'tests/subs/match-integer.js',
-    'tests/subs/match-one-of.js',
-    'tests/subs/match-where.js',
-    'tests/subs/object.js',
-    'tests/subs/primitive-types.js'
+    'tests/units/subs/array.js',
+    'tests/units/subs/custom_functions.js',
+    'tests/units/subs/match-any.js',
+    'tests/units/subs/match-integer.js',
+    'tests/units/subs/match-one-of.js',
+    'tests/units/subs/match-where.js',
+    'tests/units/subs/object.js',
+    'tests/units/subs/primitive-types.js'
   );
 
+  mainFile.push(
+    'tests/units/main.js'
+  );  
+
   integrationFiles.push(
-    'tests/integration/path.js'
+    'tests/integrations/path.js'
   );
 
   api.addFiles(constantsFile);
