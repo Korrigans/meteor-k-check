@@ -40,7 +40,7 @@ buildCheckError = function buildCheckError(value, pattern, optMessage) {
     // and a pattern. We need to build some kind of stack trace from these values.
     const logEntry = K.ErrorLog.log(errorKey, {
       message: errorMessage,
-      path: _.map(buildCheckError.path, ({ direction, of, against }) =>
+      path: buildCheckError.path.map(({ direction, of, against }) =>
         `${direction} of ${beautifyValue(of)} against ${beautifyPattern(against)}`
       )
     });
@@ -122,4 +122,6 @@ Object.defineProperties(buildCheckError.path, {
   removeLast: notEnumerable
 });
 
-K.Internals.check.buildCheckError = buildCheckError;
+if (K.debug && K.debug === true) {
+  K.Internals.check.buildCheckError = buildCheckError;
+}

@@ -1,4 +1,3 @@
-// NOTE: Define beautifyPattern and beautifyValue on K?
 /**
  * Turn a pattern into an elegant string
  * @private
@@ -96,5 +95,9 @@ beautifyValue = function beautifyValue(value) {
   }
 };
 
-K.Internals.check.beautifyValue = beautifyValue;
-K.Internals.check.beautifyPattern = beautifyPattern;
+// NOTE: Define beautifyPattern and beautifyValue on K.Internals.check
+// Only if K.debug is present
+if (K.debug && K.debug === true) {
+  K.Internals.check.beautifyValue = beautifyValue;
+  K.Internals.check.beautifyPattern = beautifyPattern;
+}
