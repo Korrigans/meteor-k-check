@@ -10,7 +10,7 @@ Package.describe({
   eslint no-var: 0
  */
 Package.onUse(function onUse(api) {
-  var legacyFiles,
+  var patternsFiles,
     checkFile,
     symbolFile,
     internalsFiles;
@@ -27,14 +27,14 @@ Package.onUse(function onUse(api) {
 
   api.imply('korrigans:k');
 
-  legacyFiles = [
-    'legacy-patterns/array.js',
-    'legacy-patterns/custom-functions.js',
-    'legacy-patterns/match-integer.js',
-    'legacy-patterns/match-one-of.js',
-    'legacy-patterns/match-where.js',
-    'legacy-patterns/object.js',
-    'legacy-patterns/primitive-types.js'
+  patternsFiles = [
+    'patterns/array.js',
+    'patterns/custom-functions.js',
+    'patterns/match-integer.js',
+    'patterns/match-one-of.js',
+    'patterns/match-where.js',
+    'patterns/object.js',
+    'patterns/primitive-types.js'
   ];
   checkFile = 'check.js';
   symbolFile = 'check-symbol.js';
@@ -49,7 +49,7 @@ Package.onUse(function onUse(api) {
   // method calls, the order is not important.
   api.addFiles(internalsFiles);
   api.addFiles(checkFile);
-  api.addFiles(legacyFiles);
+  api.addFiles(patternsFiles);
   api.addFiles(symbolFile);
 });
 
@@ -92,14 +92,14 @@ Package.onTest(function onTest(api) {
   );
 
   patternFiles.push(
-    'tests/units/subs/array.js',
-    'tests/units/subs/custom-functions.js',
-    'tests/units/subs/match-any.js',
-    'tests/units/subs/match-integer.js',
-    'tests/units/subs/match-one-of.js',
-    'tests/units/subs/match-where.js',
-    'tests/units/subs/object.js',
-    'tests/units/subs/primitive-types.js'
+    'tests/units/patterns/array.js',
+    'tests/units/patterns/custom-functions.js',
+    'tests/units/patterns/match-any.js',
+    'tests/units/patterns/match-integer.js',
+    'tests/units/patterns/match-one-of.js',
+    'tests/units/patterns/match-where.js',
+    'tests/units/patterns/object.js',
+    'tests/units/patterns/primitive-types.js'
   );
 
   mainFile.push(
