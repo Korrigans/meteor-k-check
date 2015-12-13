@@ -28,3 +28,7 @@ checkLegacyArray = function checkLegacyArray(value, pattern) {
     }
   }
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkLegacyArray = checkLegacyArray;
+}

@@ -29,3 +29,7 @@ checkLegacyWhere = function checkLegacyWhere(value, pattern) {
     );
   }
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkLegacyWhere = checkLegacyWhere;
+}

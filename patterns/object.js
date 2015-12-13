@@ -41,3 +41,7 @@ checkLegacyObject = function checkLegacyObject(value, pattern) {
     }
   }
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkLegacyObject = checkLegacyObject;
+}

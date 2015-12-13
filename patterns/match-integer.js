@@ -31,3 +31,7 @@ checkLegacyMatchInteger = function checkLegacyMatchInteger(value) {
 
   throw buildCheckError(value, 'Match.Integer');
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkLegacyMatchInteger = checkLegacyMatchInteger;
+}

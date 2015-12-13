@@ -31,3 +31,7 @@ checkCustomFunction = function checkCustomFunction(value, pattern) {
     against: beautifyPattern(pattern)
   });
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkCustomFunction = checkCustomFunction;
+}

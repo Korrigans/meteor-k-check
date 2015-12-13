@@ -24,3 +24,7 @@ checkForPrimitive = function checkForPrimitive(value, pattern) {
 
   throw buildCheckError(value, pattern);
 };
+
+if (K.debug && K.debug === true) {
+  K.Internals.check.checkForPrimitive = checkForPrimitive;
+}
