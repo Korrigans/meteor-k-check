@@ -77,43 +77,46 @@ K.check = function KCheck(value, pattern) {
 
     // Legacy object pattern
     if (_.isObject(pattern)) {
-      return checkLegacyObject;
-    }
+      // NOTE: Unrecoverable incompatibility with check
+      // If pattern is either:
+      //  - Match.Optional
+      //  - Match.ObjectIncluding
+      //  - Match.ObjectWithValues
+      // There is no way we can differentiate them without including check.
+      // Each uses the constructor pattern with a local variable, assigning
+      // the same "pattern" field, making them indistinguishable.
+      if (_.has(pattern, 'pattern')) {
+        if (!warnedAboutMatchIncompatibilities) {
+          // Throw an error instead?
+          console.error(
+            'K.check is incompatible with Match.Optional, Match.ObjectIncluding, '
+            + 'and Match.ObjectWithValues due to a malfunction of native check '
+            + 'package. Instead, use korrigans:k-pattern '
+            + 'http://github.com/Korrigans/meteor-k-pattern'
+          );
+          warnedAboutMatchIncompatibilities = true;
+        }
 
-    // NOTE: Unrecoverable incompatibility with check
-    // If pattern is either:
-    //  - Match.Optional
-    //  - Match.ObjectIncluding
-    //  - Match.ObjectWithValues
-    // There is no way we can differentiate them without including check.
-    // Each uses the constructor pattern with a local variable, assigning
-    // the same "pattern" field, making them indistinguishable.
-    if (pattern.pattern) {
-      if (!warnedAboutMatchIncompatibilities) {
-        // Throw an error instead?
-        console.error(
-          'K.check is incompatible with Match.Optional, Match.ObjectIncluding, '
-          + 'and Match.ObjectWithValues due to a malfunction of native check '
-          + 'package. Instead, use korrigans:k-pattern '
-          + 'http://github.com/Korrigans/meteor-k-pattern'
-        );
-        warnedAboutMatchIncompatibilities = true;
+        return _.noop;
       }
 
-      return _.noop;
+      return checkLegacyObject;
     }
 
     // Some legacy primitive values tests
     if (_.includes(['string', 'number', 'boolean'], typeof pattern)) {
-      return function checkForExactValues() {
-        if (value !== pattern) {
-          throw buildCheckError(value, pattern);
-        }
-      };
+      return checkForExactValues;
     }
 
     // Nothing caught, unknown pattern
     // First empty buildCheckError.path, then throw
+    // NOTE: As of today (December 2015), Meteor runs on an old Node version.
+    // The only situation in which this code could be run is if pattern is
+    // a Symbol value. This is not testable due to Babel limitation:
+    // typeof Symbol() === 'object' with polyfill.
+    // Due to this, this code is untested.
+    // Once Meteor updates and we add 'symbol' to the list of primitive values
+    // tests, this code should be theoretically dead.
     while (buildCheckError.path.length > 0) {
       buildCheckError.path.pop();
     }

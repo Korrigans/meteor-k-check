@@ -718,6 +718,7 @@ module.exports = {
     checkLegacyObject: true,
     checkLegacyMatchOneOf: true,
     checkCustomFunction: true,
+    checkForExactValues: true,
     errorPrefix: true,
     buildCheckError: true,
     primitiveMap: true,

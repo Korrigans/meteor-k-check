@@ -1,3 +1,11 @@
+/**
+ * Check a value against a custom pattern
+ * @param  {*} value                                Value to check
+ * @param  {{ [K.check.custom]: Function }} pattern Custom pattern
+ * @throws {Error} Custom pattern validator was not a function
+ * @throws {Error} Custom pattern threw an error
+ * @return {undefined}
+ */
 checkCustomFunction = function checkCustomFunction(value, pattern) {
   if (!_.isFunction(pattern[K.check.custom])) {
     throw new Error(

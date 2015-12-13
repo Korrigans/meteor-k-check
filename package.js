@@ -30,6 +30,7 @@ Package.onUse(function onUse(api) {
   patternsFiles = [
     'patterns/array.js',
     'patterns/custom-functions.js',
+    'patterns/equal-value.js',
     'patterns/match-integer.js',
     'patterns/match-one-of.js',
     'patterns/match-where.js',
@@ -103,7 +104,7 @@ Package.onTest(function onTest(api) {
   );
 
   mainFile.push(
-    'tests/units/namespace.js'
+    'tests/units/k-check.js'
   );
 
   integrationFiles.push(
