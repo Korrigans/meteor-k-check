@@ -1,27 +1,8 @@
 checkCustomFunction = function checkCustomFunction(value, pattern) {
-  const testFunc = pattern[K.check.custom];
-
-  if (!_.isFunction(testFunc)) {
+  if (!_.isFunction(pattern[K.check.custom])) {
     throw new Error(
       `${errorPrefix} Expected custom function to be a function, `
-      + `got ${typeof testFunc}`
-    );
-  }
-
-  let error = null;
-
-  try {
-    pattern[K.check.custom](value);
-  }
-  catch (e) {
-    error = e;
-  }
-
-  if (error !== null) {
-    throw buildCheckError(
-      value,
-      `custom pattern ${beautifyPattern(testFunc)}`,
-      `(error : ${error.message})`
+      + `got ${typeof pattern[K.check.custom]}`
     );
   }
 
@@ -30,6 +11,28 @@ checkCustomFunction = function checkCustomFunction(value, pattern) {
     of: value,
     against: beautifyPattern(pattern)
   });
+
+  buildCheckError.path.lock();
+
+  let error = null, throwed = false;
+
+  try {
+    pattern[K.check.custom](value);
+  }
+  catch (e) {
+    error = e;
+    throwed = true;
+  }
+
+  buildCheckError.path.unlock();
+
+  if (throwed) {
+    throw buildCheckError(
+      value,
+      `custom pattern ${beautifyPattern(pattern[K.check.custom])}`,
+      `(error : ${error.message})`
+    );
+  }
 };
 
 if (K.debug && K.debug === true) {

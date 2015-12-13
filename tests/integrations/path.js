@@ -65,13 +65,6 @@ describe('[k-check][Integration] buildCheckError.path vs K.check', () => {
   });
 
   it('should empty path entirely if check fails', () => {
-    /*
-    try {
-      K.check([[['foo']]], [[[Number]]]);
-    }
-    catch (e) {
-      e.message = '';
-    }*/
     expect(() => K.check([[['foo']]], [[[Number]]])).toThrow();
     expect(bCE.path.length).toEqual(0);
   });
