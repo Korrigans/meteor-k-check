@@ -6,6 +6,17 @@ describe('[k-check][Unit] K.check', () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should define a special Symbol', () => {
+    const
+      expected = typeof Symbol(),
+      actual = typeof K.check.custom;
+
+    // NOTE: On old browser and Node v0.10.40 (used by Meteor 1.2.1),
+    // typeof Symbol() === 'object' due to Babel's polyfill
+    // On modern technologies, typeof Symbol() === 'symbol'
+    expect(actual).toEqual(expected);
+  });
+
   describe('incompatibilities', () => {
     it('should not run validation if pattern is object with "pattern" field', () => {
       // We are going to run a check which would fail for any other field name
