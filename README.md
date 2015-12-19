@@ -126,13 +126,13 @@ const percentagePattern = {
   max: 100,
   // Magic happens here:
   [K.check.custom](value) {
-    if(!Number.isFinite(value)) {
+    if (!Number.isFinite(value)) {
       throw new Error('value not finite number');
     }
-    if(value < this.min) {
+    if (value < this.min) {
       throw new Error('number too small');
     }
-    if(value > this.max) {
+    if (value > this.max) {
       throw new Error('number too big');
     }
     // Return value is discarded, no need to provide one
@@ -162,13 +162,13 @@ Using an existing object:
 const todayPattern = new Date();
 
 todayPattern[K.check.custom] = function createdToday(value) {
-  if(!_.isObject(value) || !_.has(value, 'creationDate')) {
+  if (!_.isObject(value) || !_.has(value, 'creationDate')) {
     throw new Error('value is not a document with creationDate property');
   }
-  if(value.creationDate.getDate() !== this.getDate()) {
+  if (value.creationDate.getDate() !== this.getDate()) {
     throw new Error('document was not created today');
   }
-}
+};
 
 // This passes
 const today = Date.now();
@@ -192,15 +192,15 @@ Some patterns can generate very lengthy error messages:
 
 ```javascript
 K.check({
-  foo : {
-    bar : {
-      baz : [3, 6, 9, 'dwarf']
+  foo: {
+    bar: {
+      baz: [3, 6, 9, 'dwarf']
     }
   }
 }, {
-  foo : {
-    bar : {
-      baz : [Number]
+  foo: {
+    bar: {
+      baz: [Number]
     }
   }
 });

@@ -1,4 +1,4 @@
-const cFEV = K.Internals.check.checkForExactValues;
+const cFEV = K.Internals.check.Patterns.checkForExactValues;
 
 describe('[k-check][Unit] checkForExactValues', () => {
   it('should be a function', () => {

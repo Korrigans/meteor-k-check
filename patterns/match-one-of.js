@@ -4,10 +4,11 @@ let warnedAboutMatchOneOf = false;
  * Check a value against legacy Match.OneOf pattern
  * @param  {*} value   Value to check
  * @param  {{ choices : Array }} pattern Pattern to check value against
+ * @memberof Patterns
  * @throws {Error}  Value was not conform to pattern
  * @returns {undefined}
  */
-checkLegacyMatchOneOf = function checkLegacyMatchOneOf(value, pattern) {
+Patterns.checkLegacyMatchOneOf = function checkLegacyMatchOneOf(value, pattern) {
   if (!warnedAboutMatchOneOf) {
     console.warn(
       'It looks like you are using Match.OneOf.\n'
@@ -40,7 +41,3 @@ checkLegacyMatchOneOf = function checkLegacyMatchOneOf(value, pattern) {
     throw buildCheckError(value, pattern);
   }
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkLegacyMatchOneOf = checkLegacyMatchOneOf;
-}

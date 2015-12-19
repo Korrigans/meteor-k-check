@@ -2,10 +2,11 @@
  * Check a value against a primitive type
  * @param  {*} value   Value to check against pattern
  * @param  {*} pattern Legacy primitive pattern to check with
+ * @memberof Patterns
  * @throws {Error} Value was not conform to pattern
  * @returns {undefined}
  */
-checkForPrimitive = function checkForPrimitive(value, pattern) {
+Patterns.checkForPrimitive = function checkForPrimitive(value, pattern) {
   if (value === null && pattern === null) {
     return;
   }
@@ -24,7 +25,3 @@ checkForPrimitive = function checkForPrimitive(value, pattern) {
 
   throw buildCheckError(value, pattern);
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkForPrimitive = checkForPrimitive;
-}

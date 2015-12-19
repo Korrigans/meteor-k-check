@@ -4,10 +4,11 @@
  * current key of current object value against current pattern
  * @param  {*}      value   Value to check
  * @param  {Object} pattern Object to check value against
+ * @memberof Patterns
  * @throws {Error}  Value was not conform to pattern
  * @returns {undefined}
  */
-checkLegacyObject = function checkLegacyObject(value, pattern) {
+Patterns.checkLegacyObject = function checkLegacyObject(value, pattern) {
   if (!_.isObject(value)) {
     throw buildCheckError(value, pattern);
   }
@@ -41,7 +42,3 @@ checkLegacyObject = function checkLegacyObject(value, pattern) {
     }
   }
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkLegacyObject = checkLegacyObject;
-}

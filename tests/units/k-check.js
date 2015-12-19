@@ -29,12 +29,14 @@ describe('[k-check][Unit] K.check', () => {
         };
 
       spyOn(console, 'error');
-      spyOn(K.Internals.check, 'checkLegacyObject');
+      spyOn(K.Internals.check.Patterns, 'checkLegacyObject');
 
       K.check(value, pattern);
 
       expect(console.error).toHaveBeenCalled();
-      expect(K.Internals.check.checkLegacyObject).not.toHaveBeenCalled();
+      expect(
+        K.Internals.check.Patterns.checkLegacyObject
+      ).not.toHaveBeenCalled();
     });
   });
 

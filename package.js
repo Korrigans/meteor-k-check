@@ -28,6 +28,7 @@ Package.onUse(function onUse(api) {
   api.imply('korrigans:k');
 
   patternsFiles = [
+    'patterns/namespace.js',
     'patterns/array.js',
     'patterns/custom-functions.js',
     'patterns/exact-value.js',
@@ -60,6 +61,8 @@ Package.onTest(function onTest(api) {
     mainFile = [],
     patternFiles = [],
     internalsFiles = [],
+
+    endToEndFiles = [],
 
     integrationFiles = [];
 
@@ -117,7 +120,12 @@ Package.onTest(function onTest(api) {
     'tests/integrations/k-check/object.js',
     'tests/integrations/k-check/primitive-types.js',
     'tests/integrations/k-check.js',
-    'tests/integrations/path.js'
+    'tests/integrations/path.js',
+    'tests/integrations/k-error-log.js'
+  );
+
+  endToEndFiles.push(
+    'tests/end-to-end/a-big-one.js'
   );
 
   api.addFiles(constantsFile);
@@ -126,4 +134,5 @@ Package.onTest(function onTest(api) {
   api.addFiles(mainFile);
 
   api.addFiles(integrationFiles);
+  api.addFiles(endToEndFiles);
 });

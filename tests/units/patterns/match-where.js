@@ -1,4 +1,4 @@
-const cLW = K.Internals.check.checkLegacyWhere;
+const cLW = K.Internals.check.Patterns.checkLegacyMatchWhere;
 
 describe('[k-check][Unit] checkLegacyWhere', () => {
   it('should be a function', () => {

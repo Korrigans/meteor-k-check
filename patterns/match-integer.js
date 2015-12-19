@@ -3,10 +3,11 @@ let warnedAboutMatchInteger = false;
 /**
  * Check value against legacy Match.Integer pattern
  * @param  {*} value Value to check
+ * @memberof Patterns
  * @throws {Error} Value was not conform to pattern
  * @returns {undefined}
  */
-checkLegacyMatchInteger = function checkLegacyMatchInteger(value) {
+Patterns.checkLegacyMatchInteger = function checkLegacyMatchInteger(value) {
   if (console.warn && !warnedAboutMatchInteger) {
     console.warn(
       'Match.Integer is deprecated and inaccurate. '
@@ -31,7 +32,3 @@ checkLegacyMatchInteger = function checkLegacyMatchInteger(value) {
 
   throw buildCheckError(value, 'Match.Integer');
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkLegacyMatchInteger = checkLegacyMatchInteger;
-}

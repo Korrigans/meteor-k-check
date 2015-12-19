@@ -1,4 +1,4 @@
-const cLO = K.Internals.check.checkLegacyObject;
+const cLO = K.Internals.check.Patterns.checkLegacyObject;
 
 describe('[k-check][Unit] checkLegacyObject', () => {
   it('should be a function', () => {

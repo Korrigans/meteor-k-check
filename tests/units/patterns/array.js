@@ -1,4 +1,4 @@
-const cLA = K.Internals.check.checkLegacyArray;
+const cLA = K.Internals.check.Patterns.checkLegacyArray;
 
 describe('[k-check][Unit] checkLegacyArray', () => {
   it('should throw error if pattern is not single-element array', () => {

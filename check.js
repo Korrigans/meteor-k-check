@@ -42,12 +42,12 @@ K.check = function KCheck(value, pattern) {
   function getCheck() {
     // Custom K.check pattern detected via Symbol
     if (_.isObject(pattern) && pattern[K.check.custom]) {
-      return checkCustomFunction;
+      return Patterns.checkCustomFunction;
     }
 
     // PRIMITIVE TESTS
     if (primitiveMap.has(pattern)) {
-      return checkForPrimitive;
+      return Patterns.checkForPrimitive;
     }
 
     // Match.Any
@@ -57,22 +57,22 @@ K.check = function KCheck(value, pattern) {
 
     // Match.Integer
     if (_.isEqual(pattern, matchInteger)) {
-      return checkLegacyMatchInteger;
+      return Patterns.checkLegacyMatchInteger;
     }
 
     // Legacy array pattern, looking like [pattern]
     if (_.isArray(pattern)) {
-      return checkLegacyArray;
+      return Patterns.checkLegacyArray;
     }
 
     // Match.OneOf
     if (pattern.choices) {
-      return checkLegacyMatchOneOf;
+      return Patterns.checkLegacyMatchOneOf;
     }
 
     // Match.Where
     if (_.isFunction(pattern.condition)) {
-      return checkLegacyWhere;
+      return Patterns.checkLegacyMatchWhere;
     }
 
     // Legacy object pattern
@@ -100,12 +100,12 @@ K.check = function KCheck(value, pattern) {
         return _.noop;
       }
 
-      return checkLegacyObject;
+      return Patterns.checkLegacyObject;
     }
 
     // Some legacy primitive values tests
     if (_.includes(['string', 'number', 'boolean'], typeof pattern)) {
-      return checkForExactValues;
+      return Patterns.checkForExactValues;
     }
 
     // Nothing caught, unknown pattern

@@ -1,5 +1,5 @@
 describe('[k-check][Integration] K.check', () => {
-  integrateExactValue();
+  integrateExactValues();
 
   integratePrimitiveTypes();
 

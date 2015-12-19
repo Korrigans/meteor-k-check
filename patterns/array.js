@@ -4,10 +4,11 @@
  * current index, of current array value, against current pattern
  * @param  {*} value   Value to check
  * @param  {*[]} pattern Legacy array pattern, like [String]
+ * @memberof Patterns
  * @throws {Error}  Value was not conform to pattern
  * @returns {undefined}
  */
-checkLegacyArray = function checkLegacyArray(value, pattern) {
+Patterns.checkLegacyArray = function checkLegacyArray(value, pattern) {
   if (pattern.length > 1) {
     throw new Error(
       `${errorPrefix} Legacy check array patterns allow only one element!`
@@ -28,7 +29,3 @@ checkLegacyArray = function checkLegacyArray(value, pattern) {
     }
   }
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkLegacyArray = checkLegacyArray;
-}

@@ -1,16 +1,16 @@
-const cEV = K.Internals.check.checkExactValue;
+integrateExactValues = function integrateExactValues() {
+  describe('vs checkForExactValues', () => {
+    it('should call checkForExactValues when pattern is primitive value', () => {
+      const
+        value = 42,
+        pattern = 42;
 
-integrateExactValue = function integrateExactValue() {
-  describe('vs checkExactValue', () => {
-    const
-      value = 42,
-      pattern = 42;
+      spyOn(K.Internals.check.Patterns, 'checkForExactValues');
 
-    spyOn(K.Internals.check, 'checkExactValue');
+      K.check(value, pattern);
 
-    K.check(value, pattern);
-
-    expect(cEV).toHaveBeenCalledWith(value, pattern);
-    expect(cEV.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkForExactValues).toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkForExactValues.calls.count()).toEqual(1);
+    });
   });
 };

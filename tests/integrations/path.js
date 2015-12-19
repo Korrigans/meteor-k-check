@@ -1,25 +1,35 @@
 const bCE = K.Internals.check.buildCheckError;
 
 describe('[k-check][Integration] buildCheckError.path vs K.check', () => {
-  it('should populate path when checking against recursive patterns', () => {
-    spyOn(bCE.path, 'push').and.callThrough();
+  describe('path population with recursive patterns', () => {
+    beforeEach(() => spyOn(bCE.path, 'push').and.callThrough());
 
-    K.check(['foo'], [String]);
+    it('should work with arrays', () => {
+      const
+        value = ['foo'],
+        pattern = [String];
 
-    expect(bCE.path.push).toHaveBeenCalledWith({
-      direction: 'index 0',
-      of: ['foo'],
-      against: [String]
+      K.check(value, pattern);
+
+      expect(bCE.path.push).toHaveBeenCalledWith({
+        direction: 'index 0',
+        of: value,
+        against: pattern
+      });
     });
 
-    K.check({
-      bar: true
-    }, { bar: Boolean });
+    it('should work with objects', () => {
+      const
+        value = { bar: true },
+        pattern = { bar: Boolean };
 
-    expect(bCE.path.push).toHaveBeenCalledWith({
-      direction: 'key bar',
-      of: { bar: true },
-      against: { bar: Boolean }
+      K.check(value, pattern);
+
+      expect(bCE.path.push).toHaveBeenCalledWith({
+        direction: 'key bar',
+        of: value,
+        against: pattern
+      });
     });
   });
 

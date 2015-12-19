@@ -4,10 +4,11 @@ let warnedAboutMatchWhere = false;
  * Check a value against legacy Match.Where pattern
  * @param  {*}                 value   Value to check
  * @param  {{ condition: * }} pattern Match.Where pattern
+ * @memberof Patterns
  * @throws {Error}  Value was not conform to pattern
  * @returns {undefined}
  */
-checkLegacyWhere = function checkLegacyWhere(value, pattern) {
+Patterns.checkLegacyMatchWhere = function checkLegacyMatchWhere(value, pattern) {
   if (!warnedAboutMatchWhere) {
     console.warn(
       'It looks like you are using Match.Where.\n'
@@ -35,7 +36,3 @@ checkLegacyWhere = function checkLegacyWhere(value, pattern) {
     );
   }
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkLegacyWhere = checkLegacyWhere;
-}

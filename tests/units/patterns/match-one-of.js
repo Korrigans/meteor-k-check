@@ -1,4 +1,4 @@
-const cLMOO = K.Internals.check.checkLegacyMatchOneOf;
+const cLMOO = K.Internals.check.Patterns.checkLegacyMatchOneOf;
 
 describe('[k-check][Unit] checkLegacyMatchOneOf', () => {
   const

@@ -1,12 +1,14 @@
 /**
  * Check a value against a custom pattern
  * @param  {*} value                                Value to check
- * @param  {{ [K.check.custom]: Function }} pattern Custom pattern
+ * @param  {Object} pattern Custom pattern
+ * @param  {Function} pattern[K.check.custom] Validation function
+ * @memberof Patterns
  * @throws {Error} Custom pattern validator was not a function
  * @throws {Error} Custom pattern threw an error
  * @return {undefined}
  */
-checkCustomFunction = function checkCustomFunction(value, pattern) {
+Patterns.checkCustomFunction = function checkCustomFunction(value, pattern) {
   if (!_.isFunction(pattern[K.check.custom])) {
     throw new Error(
       `${errorPrefix} Expected custom function to be a function, `
@@ -42,7 +44,3 @@ checkCustomFunction = function checkCustomFunction(value, pattern) {
     );
   }
 };
-
-if (K.debug && K.debug === true) {
-  K.Internals.check.checkCustomFunction = checkCustomFunction;
-}

@@ -1,4 +1,4 @@
-const cCF = K.Internals.check.checkCustomFunction;
+const cCF = K.Internals.check.Patterns.checkCustomFunction;
 
 describe('[k-check][Unit] checkCustomFunction', () => {
   it('should be a function', () => {

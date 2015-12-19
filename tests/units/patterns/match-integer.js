@@ -1,4 +1,4 @@
-const cLMI = K.Internals.check.checkLegacyMatchInteger;
+const cLMI = K.Internals.check.Patterns.checkLegacyMatchInteger;
 
 describe('[k-check][Unit] checkLegacyMatchInteger', () => {
   const

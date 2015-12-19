@@ -1,4 +1,4 @@
-const cFP = K.Internals.check.checkForPrimitive;
+const cFP = K.Internals.check.Patterns.checkForPrimitive;
 
 describe('[k-check][Unit] checkForPrimitive', () => {
   it('should be a function', () => {
