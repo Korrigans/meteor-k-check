@@ -110,7 +110,6 @@ Package.onTest(function onTest(api) {
   integrationFiles.push(
     'tests/integrations/k-check/array.js',
     'tests/integrations/k-check/custom-functions.js',
-    'tests/integrations/k-check/match-any.js',
     'tests/integrations/k-check/match-integer.js',
     'tests/integrations/k-check/match-one-of.js',
     'tests/integrations/k-check/match-where.js',
