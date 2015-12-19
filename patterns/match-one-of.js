@@ -17,23 +17,26 @@ checkLegacyMatchOneOf = function checkLegacyMatchOneOf(value, pattern) {
     );
     warnedAboutMatchOneOf = true;
   }
-  const choices = pattern.choices;
-  let failedAttemps = 0;
 
-  for (let subPattern of choices) {
+  let success = false;
+
+  for (let subPattern of pattern.choices) {
     try {
       K.check(value, subPattern);
+      success = true;
     }
     catch (e) {
       if (!_.includes(e.message, errorPrefix)) {
         // Unknown error, propagate
         throw e;
       }
-      failedAttemps += 1;
+    }
+    if (success) {
+      break;
     }
   }
-  // Did _all_ attemps fail?
-  if (failedAttemps === choices.length) {
+
+  if (!success) {
     throw buildCheckError(value, pattern);
   }
 };

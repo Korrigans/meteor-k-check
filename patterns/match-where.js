@@ -2,8 +2,8 @@ let warnedAboutMatchWhere = false;
 
 /**
  * Check a value against legacy Match.Where pattern
- * @param  {*}                        value   Value to check
- * @param  {{ condition : Function }} pattern Match.Where pattern
+ * @param  {*}                 value   Value to check
+ * @param  {{ condition: * }} pattern Match.Where pattern
  * @throws {Error}  Value was not conform to pattern
  * @returns {undefined}
  */
@@ -18,9 +18,15 @@ checkLegacyWhere = function checkLegacyWhere(value, pattern) {
     warnedAboutMatchWhere = true;
   }
 
-  const
-    testFunc = pattern.condition,
-    testResult = testFunc(value);
+  const testFunc = pattern.condition;
+
+  if (!_.isFunction(testFunc)) {
+    throw new TypeError(
+      `Expected Match.Where validator to be a function, got ${beautifyValue(testFunc)}`
+    );
+  }
+
+  const testResult = testFunc(value);
 
   if (!testResult) {
     throw buildCheckError(

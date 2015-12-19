@@ -30,7 +30,7 @@ Package.onUse(function onUse(api) {
   patternsFiles = [
     'patterns/array.js',
     'patterns/custom-functions.js',
-    'patterns/equal-value.js',
+    'patterns/exact-value.js',
     'patterns/match-integer.js',
     'patterns/match-one-of.js',
     'patterns/match-where.js',
@@ -95,11 +95,11 @@ Package.onTest(function onTest(api) {
   patternFiles.push(
     'tests/units/patterns/array.js',
     'tests/units/patterns/custom-functions.js',
-    'tests/units/patterns/match-any.js',
     'tests/units/patterns/match-integer.js',
     'tests/units/patterns/match-one-of.js',
     'tests/units/patterns/match-where.js',
     'tests/units/patterns/object.js',
+    'tests/units/patterns/exact-value.js',
     'tests/units/patterns/primitive-types.js'
   );
 
