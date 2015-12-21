@@ -60,7 +60,7 @@ describe('[k-check][Unit] buildCheckError', () => {
         expect(actual).toEqual(expected);
       });
       describe('errors', () => {
-        it('should throw if path is empty or last element is already locked', () => {
+        it('should throw if path empty or last element already locked', () => {
           expect(bCE.path.lock).toThrowError(
             Error, /corrupted path/
           );
@@ -86,7 +86,8 @@ describe('[k-check][Unit] buildCheckError', () => {
       });
       it('should be non-enumerable', () => {
         const
-          actual = Object.getOwnPropertyDescriptor(bCE.path, 'unlock').enumerable,
+          actual
+            = Object.getOwnPropertyDescriptor(bCE.path, 'unlock').enumerable,
           expected = false;
 
         expect(actual).toEqual(expected);
@@ -133,7 +134,9 @@ describe('[k-check][Unit] buildCheckError', () => {
       });
       it('should be non-enumerable', () => {
         const
-          actual = Object.getOwnPropertyDescriptor(bCE.path, 'removeLast').enumerable,
+          actual
+            = Object.getOwnPropertyDescriptor(bCE.path, 'removeLast')
+                .enumerable,
           expected = false;
 
         expect(actual).toEqual(expected);

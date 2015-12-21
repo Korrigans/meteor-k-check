@@ -17,8 +17,11 @@ describe('[k-check][Unit] K.check', () => {
     expect(actual).toEqual(expected);
   });
 
+  /*
+    eslint no-console:0
+   */
   describe('incompatibilities', () => {
-    it('should not run validation if pattern is object with "pattern" field', () => {
+    it('should not run validation if object pattern with "pattern" key', () => {
       // We are going to run a check which would fail for any other field name
       const
         value = {

@@ -12,6 +12,10 @@ describe('[k-check][Unit] checkLegacyMatchOneOf', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  /*
+    eslint no-console:0
+   */
   it('should warn once if a Match.OneOf is used', () => {
     spyOn(console, 'warn');
 

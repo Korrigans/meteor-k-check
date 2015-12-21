@@ -19,6 +19,10 @@ describe('[k-check][Unit] checkLegacyMatchInteger', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  /*
+    eslint no-console:0
+   */
   it('should warn once if a Match.Integer is used', () => {
     spyOn(console, 'warn');
 

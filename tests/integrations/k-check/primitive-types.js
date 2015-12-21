@@ -1,6 +1,6 @@
 integratePrimitiveTypes = function integratePrimitiveTypes() {
   describe('vs checkForPrimitive', () => {
-    it('should call checkForPrimitive when pattern is primitive type', () => {
+    it('should call checkForPrimitive if pattern is primitive type', () => {
       const
         value = 42,
         pattern = Number;
@@ -9,8 +9,10 @@ integratePrimitiveTypes = function integratePrimitiveTypes() {
 
       K.check(value, pattern);
 
-      expect(K.Internals.check.Patterns.checkForPrimitive).toHaveBeenCalledWith(value, pattern);
-      expect(K.Internals.check.Patterns.checkForPrimitive.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkForPrimitive)
+        .toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkForPrimitive.calls.count())
+        .toEqual(1);
     });
   });
 };

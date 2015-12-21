@@ -1,6 +1,6 @@
 integrateCustomFunctions = function integrateCustomFunctions() {
   describe('vs checkCustomFunction', () => {
-    it('should call checkLegacyMatchWhere when pattern is custom', () => {
+    it('should call checkLegacyMatchWhere if pattern is custom', () => {
       const
         value = 42,
         pattern = { [K.check.custom]() {} };
@@ -9,8 +9,10 @@ integrateCustomFunctions = function integrateCustomFunctions() {
 
       K.check(value, pattern);
 
-      expect(K.Internals.check.Patterns.checkCustomFunction).toHaveBeenCalledWith(value, pattern);
-      expect(K.Internals.check.Patterns.checkCustomFunction.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkCustomFunction)
+        .toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkCustomFunction.calls.count())
+        .toEqual(1);
     });
   });
 };

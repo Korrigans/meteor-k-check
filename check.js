@@ -87,9 +87,11 @@ K.check = function KCheck(value, pattern) {
       // the same "pattern" field, making them indistinguishable.
       if (_.has(pattern, 'pattern')) {
         if (!warnedAboutMatchIncompatibilities) {
-          // Throw an error instead?
+          /*
+            eslint no-console:0
+           */
           console.error(
-            'K.check is incompatible with Match.Optional, Match.ObjectIncluding, '
+            'K.check is incompatible with Match.Optional Match.ObjectIncluding '
             + 'and Match.ObjectWithValues due to a malfunction of native check '
             + 'package. Instead, use korrigans:k-pattern '
             + 'http://github.com/Korrigans/meteor-k-pattern'

@@ -8,6 +8,10 @@ describe('[k-check][Unit] checkLegacyWhere', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  /*
+    eslint no-console:0
+   */
   it('should warn if you use Match.Where', () => {
     spyOn(console, 'warn');
 

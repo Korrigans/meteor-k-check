@@ -5,6 +5,13 @@ const
   valueTestCases = new Map(),
   patternTestCases = new Map();
 
+/**
+ * Add a test to test map
+ * @param {*}      key     Key to use in map, also test case
+ * @param {String} value   Value expected to match key (stringified value)
+ * @param {String} message Message to use with test
+ * @returns {undefined}
+ */
 function addTest(key, value, message) {
   testCases.set(key, [value, message]);
 }
@@ -16,6 +23,9 @@ addTest(NaN, 'NaN', 'format NaN as its string equivalent');
 addTest(-Infinity, '-Infinity', 'format Infinity as its string equivalent');
 addTest(true, 'true', 'format Booleans as their string equivalent');
 
+/*
+    eslint func-names:0
+ */
 addTest(function() {}, 'anonymous function', 'format anonymous functions');
 addTest(function someFunc() {},
   'function someFunc', 'format named functions');
@@ -48,9 +58,16 @@ describe('[k-check][Unit] beautifyValue', () => {
     bar: [{ baz: 'val' }, undefined]
   }, [
     '{ foo: null, bar: [{ baz: "val" }, undefined] }',
-    'can format complex values'
+    'format complex values'
   ]);
 
+  /**
+   * Tests beautifyValue for passed testCase and value. Uses message in test.
+   * @param   {*}      testCase Value to beautify
+   * @param   {String} value    Expected return value
+   * @param   {String} message  Message to use in test description
+   * @returns {undefined}
+   */
   function runValueTest(testCase, value, message) {
     it(`should ${message}`, () => {
       const
@@ -111,6 +128,13 @@ describe('[k-check][Unit] beautifyPattern', () => {
 
   patternTestCases.set([String], ['[string]', 'format arrays properly']);
 
+  /**
+   * Tests beautifyPattern for passed testCase and value. Uses message in test.
+   * @param   {*} testCase      Pattern to beautify
+   * @param   {String} value    Expected return value
+   * @param   {String} message  Message to use in test description
+   * @returns {undefined}
+   */
   function runPatternTest(testCase, value, message) {
     it(`should ${message}`, () => {
       const

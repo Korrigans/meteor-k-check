@@ -41,7 +41,11 @@ buildCheckError = function buildCheckError(value, pattern, optMessage) {
     const logEntry = K.ErrorLog.log(errorKey, {
       message: errorMessage,
       path: buildCheckError.path.map(({ direction, of, against }) =>
-        `${direction} of ${beautifyValue(of)} against ${beautifyPattern(against)}`
+        `${direction} of ${
+          beautifyValue(of)
+        } against ${
+          beautifyPattern(against)
+        }`
       )
     });
 
@@ -80,6 +84,10 @@ buildCheckError = function buildCheckError(value, pattern, optMessage) {
  */
 buildCheckError.path = [];
 
+/**
+ * Remove last element of path if it exists and is unlocked
+ * @returns {undefined}
+ */
 buildCheckError.path.removeLast = () => {
   const lastElem = _.last(buildCheckError.path);
 
@@ -88,6 +96,12 @@ buildCheckError.path.removeLast = () => {
   }
 };
 
+/**
+ * Locks last element of path
+ * @throws {Error} Path was empty
+ * @throws {Error} Last element was already locked
+ * @return {undefined}
+ */
 buildCheckError.path.lock = () => {
   const elemToLock = _.last(buildCheckError.path);
 
@@ -101,6 +115,12 @@ buildCheckError.path.lock = () => {
   elemToLock.locked = true;
 };
 
+/**
+ * Unlocks last element of path
+ * @throws {Error} Path was empty
+ * @throws {Error} Last element was not locked
+ * @return {undefined}
+ */
 buildCheckError.path.unlock = () => {
   if (buildCheckError.path.length === 0) {
     throw new Error('corrupted path: path empty, can not unlock');

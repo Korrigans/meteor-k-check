@@ -31,13 +31,25 @@ describe('[k-check][Integration] buildCheckError vs K.ErrorLog', () => {
     expect(lastLogEntry.path.length).toEqual(deepness - 1);
 
     expect(lastLogEntry.path[0]).toEqual(
-      `key foo of ${beautifyValue(value)} against ${beautifyPattern(pattern)}`
+      `key foo of ${
+        beautifyValue(value)
+      } against ${
+        beautifyPattern(pattern)
+      }`
     );
     expect(lastLogEntry.path[1]).toEqual(
-      `index 0 of ${beautifyValue(value.foo)} against ${beautifyPattern(pattern.foo)}`
+      `index 0 of ${
+        beautifyValue(value.foo)
+      } against ${
+        beautifyPattern(pattern.foo)
+      }`
     );
     expect(lastLogEntry.path[2]).toEqual(
-      `key bar of ${beautifyValue(value.foo[0])} against ${beautifyPattern(pattern.foo[0])}`
+      `key bar of ${
+        beautifyValue(value.foo[0])
+      } against ${
+        beautifyPattern(pattern.foo[0])
+      }`
     );
   });
 });

@@ -50,6 +50,9 @@ primitiveValues.set(null, [
 matchAny = Match.Any;
 matchInteger = Match.Integer;
 
+/*
+  eslint jasmine/missing-expect: 0
+ */
 matches = (funcToTest, value, pattern, message) => {
   it(message, done => {
     let error = null;

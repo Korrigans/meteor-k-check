@@ -1,5 +1,8 @@
 let warnedAboutMatchInteger = false;
 
+/*
+  eslint no-console:0, no-bitwise:0, lodash3/prefer-lodash-typecheck:0
+ */
 /**
  * Check value against legacy Match.Integer pattern
  * @param  {*} value Value to check

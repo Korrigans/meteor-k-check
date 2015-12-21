@@ -23,7 +23,7 @@ describe('[k-check][Unit] checkForPrimitive', () => {
     for (let type of primitiveValues.keys()) {
       const allTypes = [];
 
-      // XXX: Manually populate all types, Babel does not seem to like:
+      // NOTE: Manually populate all types, Babel does not seem to like:
       //     allTypes = [...primitiveValues.keys()]
       // (Returns a MapIterator instead of an array)
       for (let primitiveType of primitiveValues.keys()) {

@@ -1,6 +1,6 @@
 integrateObject = function integrateObject() {
   describe('vs checkLegacyObject', () => {
-    it('should call checkLegacyObject when pattern is custom', () => {
+    it('should call checkLegacyObject if pattern is custom', () => {
       const
         value = { foo: true },
         pattern = { foo: Boolean };
@@ -9,10 +9,12 @@ integrateObject = function integrateObject() {
 
       K.check(value, pattern);
 
-      expect(K.Internals.check.Patterns.checkLegacyObject).toHaveBeenCalledWith(value, pattern);
-      expect(K.Internals.check.Patterns.checkLegacyObject.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkLegacyObject)
+        .toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkLegacyObject.calls.count())
+        .toEqual(1);
     });
-    it('should call K.check recursively for each key in pattern and value', () => {
+    it('should use K.check recursively for each key in pattern/value', () => {
       const
         subValue = 'very stronk',
         subPattern = String,

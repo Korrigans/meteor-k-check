@@ -33,7 +33,7 @@ describe('[k-check][Unit] checkLegacyArray', () => {
   describe('fails', () => {
     const allTypes = [];
 
-    // XXX: Manually populate all types, Babel does not seem to like:
+    // NOTE: Manually populate all types, Babel does not seem to like:
     //     allTypes = [...primitiveValues.keys()]
     // (Returns a MapIterator instead of an array)
     for (let primitiveType of primitiveValues.keys()) {
@@ -56,5 +56,4 @@ describe('[k-check][Unit] checkLegacyArray', () => {
       }
     }
   });
-
 });

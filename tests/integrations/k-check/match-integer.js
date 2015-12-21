@@ -1,6 +1,6 @@
 integrateMatchInteger = function integrateMatchInteger() {
   describe('vs checkLegacyMatchInteger', () => {
-    it('should call checkLegacyMatchInteger when pattern is Match.Integer', () => {
+    it('should call checkLegacyMatchInteger if pattern is MatchInteger', () => {
       const
         value = 42,
         pattern = Match.Integer;
@@ -9,8 +9,10 @@ integrateMatchInteger = function integrateMatchInteger() {
 
       K.check(value, pattern);
 
-      expect(K.Internals.check.Patterns.checkLegacyMatchInteger).toHaveBeenCalledWith(value, pattern);
-      expect(K.Internals.check.Patterns.checkLegacyMatchInteger.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkLegacyMatchInteger)
+        .toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkLegacyMatchInteger.calls.count())
+        .toEqual(1);
     });
   });
 };

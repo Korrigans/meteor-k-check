@@ -10,10 +10,11 @@ Package.describe({
   eslint no-var: 0
  */
 Package.onUse(function onUse(api) {
-  var patternsFiles,
-    checkFile,
-    symbolFile,
-    internalsFiles;
+  var
+    patternsFiles = [],
+    checkFile = [],
+    symbolFile = [],
+    internalsFiles = [];
 
   api.versionsFrom('1.2.1');
 
@@ -27,7 +28,7 @@ Package.onUse(function onUse(api) {
 
   api.imply('korrigans:k');
 
-  patternsFiles = [
+  patternsFiles.push(
     'patterns/namespace.js',
     'patterns/array.js',
     'patterns/custom-functions.js',
@@ -37,18 +38,18 @@ Package.onUse(function onUse(api) {
     'patterns/match-where.js',
     'patterns/object.js',
     'patterns/primitive-types.js'
-  ];
-  checkFile = 'check.js';
-  symbolFile = 'check-symbol.js';
-  internalsFiles = [
+  );
+  checkFile.push('check.js');
+  symbolFile.push('check-symbol.js');
+  internalsFiles.push(
     'internals/namespace.js',
     'internals/primitive-map.js',
     'internals/beautifiers.js',
     'internals/error-builder.js'
-  ];
+  );
 
-  // As all these files only feature declarations and no actual
-  // method calls, the order is not important.
+  // NOTE: As all these files only feature declarations and no actual
+  // function call, the order is not important.
   api.addFiles(internalsFiles);
   api.addFiles(checkFile);
   api.addFiles(patternsFiles);
@@ -58,8 +59,8 @@ Package.onUse(function onUse(api) {
 Package.onTest(function onTest(api) {
   var
     constantsFile = [],
-    mainFile = [],
-    patternFiles = [],
+    unitExecutionFile = [],
+    patternUnitFiles = [],
     internalsFiles = [],
 
     endToEndFiles = [],
@@ -95,7 +96,7 @@ Package.onTest(function onTest(api) {
     'tests/units/internals/error-builder.js'
   );
 
-  patternFiles.push(
+  patternUnitFiles.push(
     'tests/units/patterns/array.js',
     'tests/units/patterns/custom-functions.js',
     'tests/units/patterns/match-integer.js',
@@ -106,7 +107,7 @@ Package.onTest(function onTest(api) {
     'tests/units/patterns/primitive-types.js'
   );
 
-  mainFile.push(
+  unitExecutionFile.push(
     'tests/units/k-check.js'
   );
 
@@ -128,10 +129,17 @@ Package.onTest(function onTest(api) {
     'tests/end-to-end/a-big-one.js'
   );
 
+  // NOTE: Expected load order is:
+  // 1. Constants
+  // 2. Internal tests
+  // 3. Patterns unit tests declarations
+  // 4. Unit tests main file
+  // 5. Integration tests
+  // 6. End-to-end tests
   api.addFiles(constantsFile);
   api.addFiles(internalsFiles);
-  api.addFiles(patternFiles);
-  api.addFiles(mainFile);
+  api.addFiles(patternUnitFiles);
+  api.addFiles(unitExecutionFile);
 
   api.addFiles(integrationFiles);
   api.addFiles(endToEndFiles);

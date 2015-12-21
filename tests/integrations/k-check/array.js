@@ -1,6 +1,6 @@
 integrateArray = function integrateArray() {
   describe('vs checkLegacyArray', () => {
-    it('should call checkLegacyArray when pattern is custom', () => {
+    it('should call checkLegacyArray if pattern is custom', () => {
       const
         value = [true],
         pattern = [Boolean];
@@ -9,10 +9,12 @@ integrateArray = function integrateArray() {
 
       K.check(value, pattern);
 
-      expect(K.Internals.check.Patterns.checkLegacyArray).toHaveBeenCalledWith(value, pattern);
-      expect(K.Internals.check.Patterns.checkLegacyArray.calls.count()).toEqual(1);
+      expect(K.Internals.check.Patterns.checkLegacyArray)
+        .toHaveBeenCalledWith(value, pattern);
+      expect(K.Internals.check.Patterns.checkLegacyArray.calls.count())
+        .toEqual(1);
     });
-    it('should call K.check recursively for each index in pattern and value', () => {
+    it('should use K.check recursively for each index in pattern/value', () => {
       const
         [subValueA, subValueB, subValueC] = [true, false, false],
         subPattern = Boolean,
